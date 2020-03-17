@@ -156,6 +156,7 @@ class OneWayLinkedList<E> implements IList<E>{
                 e.next = e.next.next;
                 return oldValue;
             }
+            e = e.next;
             i++;
         }
     }
