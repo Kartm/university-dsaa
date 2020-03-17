@@ -36,12 +36,12 @@ class Document{
 
     @Override
     public String toString() {
-        String result = "Document: " + this.name + "\n";
+        StringBuilder result = new StringBuilder("Document: " + this.name + "\n");
         for (Link link : links) {
-            result += link.ref + "\n";
+            result.append(link.ref).append("\n");
         }
 
-        return StringUtils.chomp(result);
+        return StringUtils.chomp(result.toString());
     }
 
 }
