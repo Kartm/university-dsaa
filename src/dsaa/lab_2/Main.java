@@ -13,7 +13,7 @@ public class Main {
         int currentDocNo=0;
         int maxNo=-1;
         boolean halt=false;
-        while(!halt) {
+        while(!halt && scan.hasNextLine()) {
             String line=scan.nextLine();
             // empty line and comment line - read next line
             if(line.length()==0 || line.charAt(0)=='#')

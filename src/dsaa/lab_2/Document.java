@@ -1,7 +1,4 @@
 package dsaa.lab_2;
-
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -41,7 +38,7 @@ class Document{
             result.append(link.ref).append("\n");
         }
 
-        return StringUtils.chomp(result.toString());
+        return result.toString().trim();
     }
 
 }

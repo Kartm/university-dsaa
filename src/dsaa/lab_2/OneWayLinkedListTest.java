@@ -1,6 +1,9 @@
 package dsaa.lab_2;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,6 +96,7 @@ class OneWayLinkedListTest {
     @org.junit.jupiter.api.Test
     void indexOf() {
         OneWayLinkedList<Integer> list = new OneWayLinkedList<>();
+
         Integer a = 100;
         list.add(a);
         assertEquals(0, list.indexOf(a));
@@ -100,6 +104,12 @@ class OneWayLinkedListTest {
         Integer b = 10;
         list.add(b);
         assertEquals(1, list.indexOf(b));
+
+        Integer c = 1;
+        assertEquals(-1, list.indexOf(c));
+
+        list.remove(a);
+        assertEquals(0, list.indexOf(b));
     }
 
     @org.junit.jupiter.api.Test
@@ -121,10 +131,36 @@ class OneWayLinkedListTest {
     }
 
     @org.junit.jupiter.api.Test
+    void removeObject() {
+        OneWayLinkedList<Link> linkList = new OneWayLinkedList<>();
+        linkList.add(new Link("a"));
+        linkList.add(new Link("b"));
+        assertFalse(linkList.remove(new Link("c")));
+        assertTrue(linkList.remove(new Link("a")));
+    }
+
+    @org.junit.jupiter.api.Test
+    void removeIndexObject() {
+        OneWayLinkedList<Link> linkList = new OneWayLinkedList<>();
+        linkList.add(new Link("a"));
+        linkList.add(new Link("b"));
+        linkList.add(new Link("c"));
+        assertTrue(linkList.remove(new Link("a")));
+        assertEquals(new Link("c"), linkList.remove(1));
+    }
+
+    @org.junit.jupiter.api.Test
     void size() {
         OneWayLinkedList<Integer> list = new OneWayLinkedList<>();
         assertEquals(list.size(), 0);
         list.add(1);
         assertEquals(list.size(), 1);
+    }
+
+    @org.junit.jupiter.api.Test
+    void nextIfEmpty() {
+        OneWayLinkedList<Integer> list = new OneWayLinkedList<>();
+        Iterator<Integer> it = list.iterator();
+        assertThrows(NullPointerException.class, () -> it.next());
     }
 }

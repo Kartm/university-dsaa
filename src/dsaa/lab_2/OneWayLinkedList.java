@@ -24,12 +24,12 @@ class OneWayLinkedList<E> implements IList<E>{
         }
 
         @Override
-        public E next() {
+        public E next() throws NullPointerException {
             if(hasNext()) {
                 element = element.next;
                 return element.object;
             } else {
-                throw new NoSuchElementException();
+                throw new NullPointerException();
             }
         }
     }
@@ -150,7 +150,7 @@ class OneWayLinkedList<E> implements IList<E>{
 
         Element e = sentinel;
         int i = 0;
-        while(i < this.size()) {
+        while(true) {
             if(i == index) {
                 E oldValue = e.next.object;
                 e.next = e.next.next;
@@ -158,7 +158,6 @@ class OneWayLinkedList<E> implements IList<E>{
             }
             i++;
         }
-        return null;
     }
 
     @Override
