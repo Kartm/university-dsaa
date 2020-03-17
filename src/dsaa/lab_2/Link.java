@@ -16,6 +16,9 @@ class Link{
         if (getClass() != obj.getClass())
             return false;
         Link other = (Link) obj;
+        if(other.ref == null) {
+            return false;
+        }
         return this.ref.contentEquals(other.ref);
     }
 }

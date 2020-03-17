@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -162,5 +163,12 @@ class OneWayLinkedListTest {
         OneWayLinkedList<Integer> list = new OneWayLinkedList<>();
         Iterator<Integer> it = list.iterator();
         assertThrows(NullPointerException.class, () -> it.next());
+    }
+
+    @org.junit.jupiter.api.Test
+    void removeIfEmpty() {
+        OneWayLinkedList<Link> list = new OneWayLinkedList<>();
+        assertFalse(list.remove(new Link("10")));
+        assertThrows(NoSuchElementException.class, () -> list.remove(40));
     }
 }

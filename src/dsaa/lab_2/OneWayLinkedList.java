@@ -150,7 +150,7 @@ class OneWayLinkedList<E> implements IList<E>{
 
         Element e = sentinel;
         int i = 0;
-        while(true) {
+        while(e.next != null) {
             if(i == index) {
                 E oldValue = e.next.object;
                 e.next = e.next.next;
@@ -159,6 +159,7 @@ class OneWayLinkedList<E> implements IList<E>{
             e = e.next;
             i++;
         }
+        throw new NoSuchElementException();
     }
 
     @Override
