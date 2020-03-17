@@ -65,7 +65,7 @@ public class L1e1 {
             // copy line to output (it is easier to find a place of a mistake)
             System.out.println("!" + line);
 
-            String word[] = line.split(" ");
+            String[] word = line.split(" ");
 
             if (word[0].equalsIgnoreCase("py") && word.length == 2) {
                 int value = Integer.parseInt(word[1]);

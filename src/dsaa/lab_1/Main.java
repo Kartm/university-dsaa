@@ -105,11 +105,11 @@ public class Main {
             if (line.length() == 0 || line.charAt(0) == '#')
                 continue;
             // copy line to output (it is easier to find a place of a mistake)
-            if(isReadingDocument == false) {
+            if(!isReadingDocument) {
                 System.out.println("!" + line);
             }
 
-            String word[] = line.split(" ");
+            String[] word = line.split(" ");
             if(isReadingDocument) {
                 if(word[0].equalsIgnoreCase("eod") && word.length == 1) {
                     analyzeDocument();
@@ -139,7 +139,7 @@ public class Main {
                 continue;
             }
 
-            if(isReadingDocument == false) {
+            if(!isReadingDocument) {
                 System.out.println("Wrong command");
             }
         }

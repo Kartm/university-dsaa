@@ -10,7 +10,7 @@ class OneWayLinkedList<E> implements IList<E>{
         Element next=null;
     }
 
-    protected Element sentinel;
+    protected final Element sentinel;
 
     private class InnerIterator implements Iterator<E>{
         private Element element;

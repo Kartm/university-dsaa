@@ -1,10 +1,10 @@
 package dsaa_jk.assignment_2;
 
 public class ArrayIterator<T> implements Iterator<T> {
-    private T array[];
+    private T[] array;
     private int pos;
 
-    public ArrayIterator(T array[]){
+    public ArrayIterator(T[] array){
         this.array = array;
         this.pos = 0;
     }

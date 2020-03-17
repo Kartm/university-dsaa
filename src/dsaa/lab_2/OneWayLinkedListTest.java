@@ -92,6 +92,12 @@ class OneWayLinkedListTest {
 
     @org.junit.jupiter.api.Test
     void set() {
+        OneWayLinkedList<Integer> list = new OneWayLinkedList<>();
+
+        assertThrows(NoSuchElementException.class, () -> list.set(0, new Integer(10)));
+        list.add(new Integer(10));
+        list.set(0, new Integer(123));
+        assertTrue(list.contains(new Integer(123)));
     }
 
     @org.junit.jupiter.api.Test
@@ -162,7 +168,7 @@ class OneWayLinkedListTest {
     void nextIfEmpty() {
         OneWayLinkedList<Integer> list = new OneWayLinkedList<>();
         Iterator<Integer> it = list.iterator();
-        assertThrows(NullPointerException.class, () -> it.next());
+        assertThrows(NullPointerException.class, it::next);
     }
 
     @org.junit.jupiter.api.Test

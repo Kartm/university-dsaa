@@ -1,8 +1,6 @@
 package dsaa.lab_2;
 
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 interface IList<E> extends Iterable<E> {
     boolean add(E e); // add element to the end of list
