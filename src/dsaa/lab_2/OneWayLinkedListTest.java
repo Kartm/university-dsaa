@@ -177,4 +177,14 @@ class OneWayLinkedListTest {
         assertFalse(list.remove(new Link("10")));
         assertThrows(NoSuchElementException.class, () -> list.remove(40));
     }
+
+    @org.junit.jupiter.api.Test
+    void threeElementsInsertFourth() {
+        OneWayLinkedList<Link> list = new OneWayLinkedList<>();
+        list.add(new Link("asd"));
+        list.add(new Link("dsa"));
+        list.add(new Link("alabama"));
+        list.add(new Link("alabamamamamama"));
+        list.set(4, new Link("NEW"));
+    }
 }

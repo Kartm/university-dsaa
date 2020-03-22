@@ -69,7 +69,7 @@ public class Main {
                 int index = Integer.parseInt(word[1]);
                 try {
                     doc[currentDocNo].links.add(index, new Link(word[2]));
-                } catch (NoSuchElementException e) {
+                } catch (NoSuchElementException|IndexOutOfBoundsException e) {
                     System.out.println("error");
                 }
                 continue;
