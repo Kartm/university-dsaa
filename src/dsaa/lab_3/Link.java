@@ -21,4 +21,9 @@ class Link{
         }
         return this.ref.contentEquals(other.ref);
     }
+
+    @Override
+    public String toString() {
+        return this.ref;
+    }
 }

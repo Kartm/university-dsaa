@@ -12,6 +12,7 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
         }
 
         public Element(E e, Element next, Element prev) {
+            this.object = e;
             this.next = next;
             this.prev = prev;
         }
@@ -40,11 +41,11 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
 
         @Override
         public E next() {
-            if(hasNext()) {
+            if (hasNext()) {
                 element = element.next;
                 return element.object;
             } else {
-                throw new NullPointerException();
+                throw new NoSuchElementException();
             }
         }
     }
@@ -65,12 +66,12 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
 
         @Override
         public boolean hasPrevious() {
-            return current.prev != null && current.prev.object != null;
+            return current.prev != head && current.prev != null;
         }
 
         @Override
         public E next() {
-            if(hasNext()) {
+            if (hasNext()) {
                 current = current.next;
                 return current.object;
             } else {
@@ -85,7 +86,7 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
 
         @Override
         public E previous() {
-            if(hasPrevious()) {
+            if (hasPrevious()) {
                 current = current.prev;
                 return current.object;
             } else {
@@ -106,7 +107,7 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
 
         @Override
         public void set(E e) {
-            if(current != head && current != tail) {
+            if (current != head && current != tail) {
                 current.object = e;
             } else {
                 throw new NoSuchElementException();
@@ -120,22 +121,20 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
 
     @Override
     public void add(int index, E element) {
-        if(!isIndexCorrect(index)) {
-            throw new IndexOutOfBoundsException();
+        if (!isIndexCorrect(index)) {
+            throw new NoSuchElementException();
         }
 
         int i = 0;
         Element temp = head;
 
-        while(i <= index) {
+        while (i < index) {
             temp = temp.next;
-            if(i == index) {
-                break;
-            }
             i++;
         }
 
         Element newElement = new Element(element, temp.next, temp.next.prev);
+
         temp.next = newElement;
         temp.next.next.prev = newElement;
     }
@@ -161,14 +160,14 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
 
     @Override
     public E get(int index) {
-        if(!isIndexCorrect(index)) {
-            throw new IndexOutOfBoundsException();
+        if (!isIndexCorrect(index) || size() == 0 || index == size()) {
+            throw new NoSuchElementException();
         }
         int i = 0;
         Iterator<E> it = iterator();
 
-        while(it.hasNext()) {
-            if(i == index) {
+        while (it.hasNext()) {
+            if (i == index) {
                 return it.next();
             }
             it.next();
@@ -179,8 +178,8 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
 
     @Override
     public E set(int index, E element) {
-        if(!isIndexCorrect(index)) {
-            throw new IndexOutOfBoundsException();
+        if (!isIndexCorrect(index)) {
+            throw new NoSuchElementException();
         }
 
         E temp = remove(index);
@@ -192,8 +191,8 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
     public int indexOf(E element) {
         Iterator<E> it = this.iterator();
         int i = 0;
-        while(it.hasNext()) {
-            if(it.next().equals(element)) {
+        while (it.hasNext()) {
+            if (it.next().equals(element)) {
                 return i;
             }
             i++;
@@ -218,25 +217,29 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
 
     @Override
     public E remove(int index) {
-        int i = 0;
-        Iterator<E> it = iterator();
-        Element current = head;
-        while(it.hasNext()) {
-            if(i == index) {
-                current.prev.next = current.next;
-                current.next.prev = current.prev;
-                return current.object;
-            }
+        if (!isIndexCorrect(index)) {
+            throw new NoSuchElementException();
         }
-        return null;
+
+        int i = 0;
+        Element current = head;
+        while (i <= index) {
+            current = current.next;
+            i++;
+        }
+        if (current.next == null) {
+            throw new NoSuchElementException();
+        }
+        E oldValue = current.object;
+        current.prev.next = current.next;
+        current.next.prev = current.prev;
+        return oldValue;
     }
 
     @Override
     public boolean remove(E e) {
         int indexOfE = indexOf(e);
-        if(indexOfE == -1) {
-            // todo not sure which to return
-            // throw new NoSuchElementException();
+        if (indexOfE == -1) {
             return false;
         }
         remove(indexOfE);
@@ -247,29 +250,58 @@ class TwoWayLinkedListWithHead<E> implements IList<E> {
     public int size() {
         int i = 0;
         Iterator<E> it = iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             i++;
             it.next();
         }
         return i;
     }
 
-    public String toStringReverse() {
-        StringBuilder retStr = new StringBuilder();
-
-        ListIterator<E> iter = new InnerListIterator();
-        while (iter.hasPrevious())
-        {
-            retStr.append(iter.previous().toString());
+    public String toString() {
+        ListIterator<E> it = new InnerListIterator();
+        StringBuilder result = new StringBuilder("\n");
+        while (it.hasNext()) {
+            result.append(it.next()).append("\n");
         }
 
-        return retStr.toString();
+        return result.toString().trim();
+    }
+
+    public String toStringReverse() {
+        ListIterator<E> it = new InnerListIterator();
+
+        // move iterator to the end
+        E lastItem = null;
+        while (it.hasNext()) {
+            lastItem = it.next();
+        }
+
+        StringBuilder result;
+        if(lastItem != null) {
+            result = new StringBuilder(lastItem.toString() + "\n");
+        } else {
+            result = new StringBuilder("");
+        }
+
+        while (it.hasPrevious()) {
+            result.append(it.previous()).append("\n");
+        }
+
+        return result.toString().trim();
     }
 
     public void add(TwoWayLinkedListWithHead<E> other) {
-        // todo check if the same list
-        tail.next = other.head.next;
-        head.prev = other.tail.prev;
+        if(this.equals(other)) {
+            return;
+        }
+
+        tail.prev.next = other.head.next;
+        other.head.next.prev = tail.prev;
+        tail = other.tail;
+
+        // clear references to our list
+        // to preserve the other list
+        other.clear();
     }
 
     private boolean isIndexCorrect(int index) {

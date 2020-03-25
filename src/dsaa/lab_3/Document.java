@@ -48,7 +48,7 @@ class Document {
 
     public String toStringReverse() {
         String retStr = "Document: " + name;
-        return retStr + link.toStringReverse();
+        return retStr + "\n" + link.toStringReverse();
     }
 
 }
