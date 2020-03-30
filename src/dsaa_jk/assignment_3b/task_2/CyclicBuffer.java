@@ -1,4 +1,4 @@
-package dsaa_jk.assignment_3b;
+package dsaa_jk.assignment_3b.task_2;
 
 public class CyclicBuffer {
     public Object[] elements = null;
@@ -47,5 +47,9 @@ public class CyclicBuffer {
         Object nextObj = elements[nextPosition];
         fillCount--;
         return nextObj;
+    }
+
+    public boolean isEmpty() {
+        return this.fillCount == 0;
     }
 }

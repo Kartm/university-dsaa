@@ -1,4 +1,4 @@
-package dsaa_jk.assignment_3b;
+package dsaa_jk.assignment_3b.task_3;
 
 import java.util.Random;
 
@@ -18,6 +18,11 @@ public class Customer {
 
     public Customer(String name) {
         this.name = name;
-        this.neededTime = getRandomNumberInRange(1, 5);
+        this.neededTime = getRandomNumberInRange(5, 10);
+    }
+
+    @Override
+    public String toString() {
+        return this.name + " (needed time: " + this.neededTime + ")";
     }
 }
