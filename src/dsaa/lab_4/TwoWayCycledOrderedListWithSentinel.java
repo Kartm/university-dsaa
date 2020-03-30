@@ -2,6 +2,7 @@ package dsaa.lab_4;
 
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 class TwoWayCycledOrderedListWithSentinel<E> implements IList<E> {
     private class Element{
@@ -122,26 +123,31 @@ class TwoWayCycledOrderedListWithSentinel<E> implements IList<E> {
     //@SuppressWarnings("unchecked")
     @Override
     public boolean add(E e) {
-        Element newElement = new Element(e);
-
         Element currentElement = this.sentinel.next;
-        while(currentElement != sentinel) {
-            int compareVal = ((Comparable) currentElement.object).compareTo(newElement.object);
-            if(compareVal <= 0) {
-                currentElement.addAfter(newElement);
-                return true;
+
+        // the list is empty - just insert it at the end
+        if(currentElement == sentinel) {
+            currentElement.addAfter(new Element (e));
+            return true;
+        } else {
+            // find the first appropriate point to insert new element
+            // OR reach the end of the list
+            currentElement = this.sentinel;
+            while(currentElement.next != sentinel) {
+                if(((Comparable<E>) currentElement.next.object).compareTo(e) > 0) {
+                    break;
+                }
+                currentElement = currentElement.next;
             }
-            currentElement = currentElement.next;
         }
 
-        // If it wasn't added anywhere, add to the end
-        currentElement.addBefore(newElement);
+        currentElement.addAfter(new Element(e));
         return true;
     }
 
     private Element getElement(int index) {
         if(index < 0) {
-            throw new IndexOutOfBoundsException();
+            throw new NoSuchElementException();
         }
         Element currentElement = this.sentinel.next;
         int i = 0;
@@ -150,7 +156,7 @@ class TwoWayCycledOrderedListWithSentinel<E> implements IList<E> {
             i++;
         }
         if(currentElement == sentinel) {
-            throw new IndexOutOfBoundsException();
+            throw new NoSuchElementException();
         }
         return currentElement;
     }
@@ -250,28 +256,32 @@ class TwoWayCycledOrderedListWithSentinel<E> implements IList<E> {
         return i;
     }
 
+    @Override
+    public String toString() {
+        String result = "";
+        Iterator<E> it = listIterator();
+        while(it.hasNext()) {
+            result += "\n" + it.next();
+        }
+
+        return result;
+    }
+
     //@SuppressWarnings("unchecked")
     public void add(TwoWayCycledOrderedListWithSentinel<E> other) {
         if(this.equals(other)) {
             return;
         }
 
-        Iterator<E> otherIt = other.iterator();
-        while(otherIt.hasNext()) {
-            this.add(otherIt.next());
+        while(other.size() > 0) {
+            this.add(other.remove(0));
         }
-
-        other.clear();
     }
 
     //@SuppressWarnings({ "unchecked", "rawtypes" })
     public void removeAll(E e) {
-        Element currentElement = this.sentinel.next;
-        while(currentElement != sentinel) {
-            if(currentElement.equals(e)) {
-                currentElement.remove();
-            }
-            currentElement = currentElement.next;
+        while(this.contains(e)) {
+            this.remove(e);
         }
     }
 

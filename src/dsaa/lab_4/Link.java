@@ -37,6 +37,5 @@ class Link implements Comparable<Link> {
     @Override
     public int compareTo(Link link) {
         return this.ref.compareTo(link.ref);
-        // if they're the same, the other should come second
     }
 }

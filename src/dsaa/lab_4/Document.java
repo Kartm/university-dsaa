@@ -54,7 +54,7 @@ class Document {
                             .replace(")", "");
                     int weight = Integer.parseInt(rawWeight);
                     name = name.replace("(" + weight + ")", "");
-                    return new Link(name, weight);
+                    return new Link(name.toLowerCase(), weight);
                 }
             } else {
                 return new Link(name);
@@ -70,35 +70,33 @@ class Document {
         int i = 0;
         while (iter.hasNext()) {
             retStr += iter.next();
-            if(i % 10 != 0) {
+            if(i % 9 != 0 || i == 0) {
                 retStr += " ";
-            } else if (i != 0) {
+            } else {
                 retStr += "\n";
             }
             i++;
         }
-        return retStr;
+        return retStr.trim();
     }
 
     public String toStringReverse() {
-        String retStr = "Document: " + name;
+        String retStr = "Document: " + name + '\n';
         ListIterator<Link> iter = link.listIterator();
 
-        Link last = null;
         while (iter.hasNext())
-            last = iter.next();
+            iter.next();
 
-        retStr += last + " ";
         int i = 0;
         while (iter.hasPrevious()) {
             retStr += iter.previous();
-            if(i % 10 != 0) {
+            if(i % 9 != 0 || i == 0) {
                 retStr += " ";
-            } else if (i != 0) {
+            } else {
                 retStr += "\n";
             }
             i++;
         }
-        return retStr;
+        return retStr.trim();
     }
 }
