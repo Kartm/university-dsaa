@@ -151,7 +151,7 @@ class TwoWayCycledOrderedListWithSentinelTest2 {
             links2.add(link);
         }
         links.add(links2);
-        assertEquals(links.toString(), abc);
+        assertEquals(abc, links.toString());
         assertEquals(links2.toString(), abc);
         // adding empty object test
         links2.clear();

@@ -30,7 +30,12 @@ class TwoWayCycledOrderedListWithSentinelTest {
     void addOrder() {
         list.add(b); // a
         list.add(a); // aaa
+
+        assertEquals("\na(1)\naaa(1)", list.toString());
+
         list.add(c); // c
+
+        assertEquals("\na(1)\naaa(1)\nc(1)", list.toString());
 
         assertEquals(0, list.indexOf(b));
         assertEquals(1, list.indexOf(a));

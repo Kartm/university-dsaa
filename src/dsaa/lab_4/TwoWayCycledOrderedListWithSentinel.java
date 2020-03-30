@@ -125,24 +125,45 @@ class TwoWayCycledOrderedListWithSentinel<E> implements IList<E> {
     public boolean add(E e) {
         Element currentElement = this.sentinel.next;
 
-        // the list is empty - just insert it at the end
-        if(currentElement == sentinel) {
-            currentElement.addAfter(new Element (e));
+        if (this.isEmpty())
+        {
+            currentElement.addAfter(new Element(e));
             return true;
-        } else {
-            // find the first appropriate point to insert new element
-            // OR reach the end of the list
-            currentElement = this.sentinel;
-            while(currentElement.next != sentinel) {
-                if(((Comparable<E>) currentElement.next.object).compareTo(e) > 0) {
-                    break;
+        }
+        else {
+            while (currentElement != this.sentinel)
+            {
+                // find the first appropriate point to insert new element
+                if (((Comparable<E>) currentElement.object).compareTo(e) > 0)
+                {
+                    currentElement.prev.addAfter(new Element(e));
+                    return true;
                 }
                 currentElement = currentElement.next;
             }
-        }
 
-        currentElement.addAfter(new Element(e));
+        }
+        // reached the end of the list, append
+        sentinel.prev.addAfter(new Element(e));
         return true;
+//        Element currentElement = this.sentinel.next;
+//
+//        if (this.isEmpty()) {
+//            // find the first appropriate point to insert new element
+//            // OR reach the end of the list
+//            while(currentElement != sentinel) {
+//                // if smaller than current
+//                if(((Comparable<E>) currentElement.object).compareTo(e) > 0) {
+//                    currentElement.prev.addAfter(new Element(e));
+//                    return true;
+//                }
+//                currentElement = currentElement.next;
+//            }
+//        }
+//
+//        // the list is empty - just insert it after sentinel
+//        currentElement.prev.addAfter(new Element(e));
+//        return true;
     }
 
     private Element getElement(int index) {
