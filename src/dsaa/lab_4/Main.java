@@ -69,7 +69,9 @@ public class Main {
             }
             // add str
             if (word[0].equalsIgnoreCase("add") && word.length == 2) {
-                Link link = Document.createLink(word[1]);
+                // changed this line to provide correct argument for createLink
+                Link link = Document.createLink("link=" + word[1]);
+
                 if (link == null)
                     System.out.println("error");
                 else

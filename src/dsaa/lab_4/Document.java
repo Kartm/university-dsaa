@@ -11,7 +11,7 @@ class Document {
     private static final Pattern linkPattern = Pattern.compile("(link=[\\w]+(\\([0-9]+\\))*)", Pattern.CASE_INSENSITIVE);
     private static final Pattern linkWithWeightPattern = Pattern.compile("(link=[\\w]+(\\([0-9]+\\))+)", Pattern.CASE_INSENSITIVE);
     private static final Pattern insideParenthesesPattern = Pattern.compile("\\(([^)]+)\\)", Pattern.CASE_INSENSITIVE);
-    private static final Pattern correctIdPattern = Pattern.compile("^[a-zA-Z]+$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern correctIdPattern =  Pattern.compile("^[a-z].*$", Pattern.CASE_INSENSITIVE);
 
     public Document(String name, Scanner scan) {
         this.name = name.toLowerCase();
