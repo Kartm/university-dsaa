@@ -44,7 +44,7 @@ class Document {
         Matcher linkMatcher = linkPattern.matcher(link);
         Matcher linkWithWeightMatcher = linkWithWeightPattern.matcher(link);
         if (linkMatcher.matches()) {
-            String name = link.replace("link=", "");
+            String name = link.toLowerCase().replace("link=", "");
             if (linkWithWeightMatcher.matches()) {
                 Matcher parenthesesMatcher = insideParenthesesPattern.matcher(name);
                 if (parenthesesMatcher.find()) {
