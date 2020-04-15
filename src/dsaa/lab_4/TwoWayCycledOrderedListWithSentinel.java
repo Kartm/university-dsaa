@@ -83,7 +83,7 @@ class TwoWayCycledOrderedListWithSentinel<E> implements IList<E> {
             return this.element.object;
         }
         @Override
-        public void add(E arg0) {
+        public void add(E element) {
             throw new UnsupportedOperationException();
         }
         @Override
@@ -109,7 +109,7 @@ class TwoWayCycledOrderedListWithSentinel<E> implements IList<E> {
             throw new UnsupportedOperationException();
         }
         @Override
-        public void set(E arg0) {
+        public void set(E element) {
             throw new UnsupportedOperationException();
         }
     }
