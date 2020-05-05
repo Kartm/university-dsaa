@@ -2,12 +2,8 @@ package dsaa.lab_7;
 
 import java.util.*;
 
-
 public class Main {
-
-
     static Scanner scan; // for input stream
-
 
     public static void main(String[] args) {
         System.out.println("START");
@@ -23,7 +19,7 @@ public class Main {
             // copy line to output (it is easier to find a place of a mistake)
             System.out.println("!" + line);
             String word[] = line.split(" ");
-            //getdoc name - change document to name
+            //getdoc name - chan    ge document to name
             if (word[0].equalsIgnoreCase("getdoc") && word.length == 2) {
                 currentDoc = (Document) hashTable.get(new Document(word[1]));
                 continue;
@@ -79,7 +75,8 @@ public class Main {
             // add str
             if (word[0].equalsIgnoreCase("add") && word.length == 2) {
                 if (currentDoc != null) {
-                    Link link = Document.createLink(word[1]);
+                    // changed this line to reuse link creation
+                    Link link = Document.createLink("link=" + word[1]);
                     if (link == null)
                         System.out.println("error");
                     else

@@ -14,7 +14,8 @@ class Document implements IWithName{
     private static final Pattern correctIdPattern =  Pattern.compile("^[a-z].*$", Pattern.CASE_INSENSITIVE);
     
     public Document(String name) {
-        //TODO
+        this.name = name.toLowerCase();
+        link = new TwoWayCycledOrderedListWithSentinel<Link>();
     }
 
     public Document(String name, Scanner scan) {
@@ -101,7 +102,39 @@ class Document implements IWithName{
 
     @Override
     public String getName() {
-        // TODO
-        return null;
+        return this.name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Document other = (Document) obj;
+        if (other.getName() == null) {
+            return false;
+        }
+        return this.getName().equals(other.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        int[] sequence = new int[]{7,11,13,17,19};
+
+        int resultHashCode = (int)this.name.charAt(0);
+
+
+        for(int i = 0; i < this.name.length() - 1; i++) {
+            int sequenceNumber = sequence[i % sequence.length];
+
+            resultHashCode *= sequenceNumber;
+            resultHashCode += (int)this.name.charAt(i + 1);
+
+        }
+
+        return resultHashCode;
     }
 }
