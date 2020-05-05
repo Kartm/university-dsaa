@@ -33,7 +33,7 @@ class HashTableTest {
         assertEquals(hashTable.getLoadFactor(), 0.5);
 
         hashTable.add(new Document("eee"));
-        assertTrue(hashTable.add(new Document("eee")));
+        assertFalse(hashTable.add(new Document("eee")));
 
         // expect doubling the size
         assertNotEquals(hashTable.getLoadFactor(), 0.75);
@@ -100,7 +100,7 @@ class HashTableTest {
         assertEquals(hashTable.toString(), "0:\n1:\n2:\n3:\n4:\n5:\n6:\n7:\n");
 
         hashTable.add(new Document("abc"));
-        assertEquals(hashTable.toString(), "0:\n1:\n2:\n3:\n4:\n5:\n6: abc,\n7:\n");
+        assertEquals(hashTable.toString(), "0:\n1:\n2:\n3:\n4:\n5:\n6: abc\n7:\n");
     }
 
     @Test

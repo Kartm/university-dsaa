@@ -1,5 +1,6 @@
 package dsaa.lab_7;
 
+import java.math.BigInteger;
 import java.util.ListIterator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -120,18 +121,16 @@ class Document implements IWithName{
         return this.getName().equals(other.getName());
     }
 
-    @Override
-    public int hashCode() {
+    public BigInteger hashCodeBigInt() {
         int[] sequence = new int[]{7,11,13,17,19};
 
-        int resultHashCode = (int)this.name.charAt(0);
-
+        BigInteger resultHashCode = BigInteger.valueOf((int)this.name.charAt(0));
 
         for(int i = 0; i < this.name.length() - 1; i++) {
             int sequenceNumber = sequence[i % sequence.length];
 
-            resultHashCode *= sequenceNumber;
-            resultHashCode += (int)this.name.charAt(i + 1);
+            resultHashCode = resultHashCode.multiply(BigInteger.valueOf(sequenceNumber));
+            resultHashCode = resultHashCode.add(BigInteger.valueOf((int)this.name.charAt(i + 1)));
 
         }
 

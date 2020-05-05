@@ -1,5 +1,6 @@
 package dsaa.lab_7;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -56,8 +57,8 @@ class HashTable {
     }
 
     private int getInsertPosition(Object obj) {
-        int hash = obj.hashCode();
-        return hash % this.size;
+        BigInteger hash = ((Document)obj).hashCodeBigInt();
+        return hash.mod(BigInteger.valueOf(this.size)).intValueExact();
     }
 
     private void doubleArray() {
