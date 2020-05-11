@@ -6,14 +6,14 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Document implements IWithName{
+class Document implements IWithName {
     public String name;
     public BST<Link> link;
     private static final Pattern linkPattern = Pattern.compile("(link=[\\w]+(\\([0-9]+\\))*)", Pattern.CASE_INSENSITIVE);
     private static final Pattern linkWithWeightPattern = Pattern.compile("(link=[\\w]+(\\([0-9]+\\))+)", Pattern.CASE_INSENSITIVE);
     private static final Pattern insideParenthesesPattern = Pattern.compile("\\(([^)]+)\\)", Pattern.CASE_INSENSITIVE);
-    private static final Pattern correctIdPattern =  Pattern.compile("^[a-z].*$", Pattern.CASE_INSENSITIVE);
-    
+    private static final Pattern correctIdPattern = Pattern.compile("^[a-z].*$", Pattern.CASE_INSENSITIVE);
+
     public Document(String name) {
         this.name = name.toLowerCase();
         link = new BST<Link>();
@@ -24,7 +24,7 @@ class Document implements IWithName{
         link = new BST<Link>();
         load(scan);
     }
-    
+
     public void load(Scanner scanner) {
         while (scanner.hasNext()) {
             String token = scanner.next();
@@ -71,21 +71,21 @@ class Document implements IWithName{
 
     @Override
     public String toString() {
-        String retStr="Document: "+name+"\n";
-        retStr+=link.toStringInOrder();
-        return retStr;
+        String result = "Document: " + name + "\n";
+        result += link.toStringInOrder();
+        return result;
     }
 
     public String toStringPreOrder() {
-        String retStr="Document: "+name+"\n";
-        retStr+=link.toStringPreOrder();
-        return retStr;
+        String result = "Document: " + name + "\n";
+        result += link.toStringPreOrder();
+        return result;
     }
 
     public String toStringPostOrder() {
-        String retStr="Document: "+name+"\n";
-        retStr+=link.toStringPostOrder();
-        return retStr;
+        String result = "Document: " + name + "\n";
+        result += link.toStringPostOrder();
+        return result;
     }
 
     @Override
@@ -110,12 +110,11 @@ class Document implements IWithName{
 
     @Override
     public int hashCode() {
-        // todo overflow
-        int[] sequence = new int[]{7,11,13,17,19};
+        int[] sequence = new int[]{7, 11, 13, 17, 19};
 
         int resultHashCode = this.name.charAt(0);
 
-        for(int i = 0; i < this.name.length() - 1; i++) {
+        for (int i = 0; i < this.name.length() - 1; i++) {
             int sequenceNumber = sequence[i % sequence.length];
 
             resultHashCode *= sequenceNumber;
@@ -127,15 +126,15 @@ class Document implements IWithName{
     }
 
     public BigInteger hashCodeBigInt() {
-        int[] sequence = new int[]{7,11,13,17,19};
+        int[] sequence = new int[]{7, 11, 13, 17, 19};
 
-        BigInteger resultHashCode = BigInteger.valueOf((int)this.name.charAt(0));
+        BigInteger resultHashCode = BigInteger.valueOf((int) this.name.charAt(0));
 
-        for(int i = 0; i < this.name.length() - 1; i++) {
+        for (int i = 0; i < this.name.length() - 1; i++) {
             int sequenceNumber = sequence[i % sequence.length];
 
             resultHashCode = resultHashCode.multiply(BigInteger.valueOf(sequenceNumber));
-            resultHashCode = resultHashCode.add(BigInteger.valueOf((int)this.name.charAt(i + 1)));
+            resultHashCode = resultHashCode.add(BigInteger.valueOf((int) this.name.charAt(i + 1)));
 
         }
 

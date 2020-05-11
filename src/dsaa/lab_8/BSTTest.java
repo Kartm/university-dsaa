@@ -86,16 +86,44 @@ class BSTTest {
         BST<Integer> tree = new BST<Integer>();
 
         assertTrue(tree.add(7));
+        assertFalse(tree.add(7));
         assertTrue(tree.add(5));
         assertTrue(tree.add(2));
         assertTrue(tree.add(10));
         assertTrue(tree.add(12));
 
         assertFalse(tree.add(7));
+        assertFalse(tree.add(10));
+        assertFalse(tree.add(12));
+        assertFalse(tree.add(12));
+        assertFalse(tree.add(12));
     }
 
     @Test
     void remove() {
+        BST<Integer> tree = new BST<Integer>();
+
+        assertEquals(tree.remove(7), null);
+
+        assertTrue(tree.add(7));
+        assertFalse(tree.add(7));
+
+        assertEquals(tree.remove(7), 7);
+        assertTrue(tree.add(7));
+
+        assertTrue(tree.add(10));
+        assertTrue(tree.add(11));
+        assertTrue(tree.add(12));
+        assertTrue(tree.add(13));
+        assertTrue(tree.add(14));
+        assertTrue(tree.add(15));
+        assertTrue(tree.add(16));
+        assertTrue(tree.add(17));
+
+        assertEquals(tree.remove(10), 10);
+        assertEquals(tree.remove(17), 17);
+
+        assertNull(tree.remove(1000000));
     }
 
     @Test

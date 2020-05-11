@@ -80,6 +80,7 @@ public class Main {
                     System.out.println("no current document");
                 continue;
             }
+
             // add str
             if (word[0].equalsIgnoreCase("add") && word.length == 2) {
                 if (currentDoc != null) {
@@ -139,7 +140,6 @@ public class Main {
                 System.out.print(hashTable.toString());
                 continue;
             }
-
             System.out.println("Wrong command");
         }
         System.out.println("END OF EXECUTION");
