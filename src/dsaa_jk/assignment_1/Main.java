@@ -3,7 +3,7 @@ package dsaa_jk.assignment_1;
 public class Main
 {
 	
-	// Added this lololololo
+	// removed this lololo
 	public static void main(String[] args)
 	{
 		
