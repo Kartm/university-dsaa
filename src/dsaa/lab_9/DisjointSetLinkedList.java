@@ -3,6 +3,20 @@ package dsaa.lab_9;
 public class DisjointSetLinkedList implements DisjointSetDataStructure
 {
 	
+	// public static void main(String[] args)
+	// {
+	//
+	// DisjointSetLinkedList list = new DisjointSetLinkedList(5);
+	// for (int x = 0; x < 5; x++)
+	// {
+	// list.makeSet(x);
+	// }
+	// list.union(2, 4);
+	// list.union(2, 1);
+	// System.out.println(list.toString());
+	//
+	// }
+	
 	private class Element
 	{
 		
@@ -10,13 +24,13 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 		{
 			
 			representant = item;
+			last = item;
 			
-			// next =
 		}
 		
 		int representant;
-		int next;
-		int length;
+		int next = -1;
+		int length = 1;
 		int last;
 		
 	}
@@ -38,7 +52,7 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 	public void makeSet(int item)
 	{
 		
-		arr[item] = new Element(int item);
+		arr[item] = new Element(item);
 		
 	}
 	
@@ -60,7 +74,7 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 		arr[arr[itemA].last].next = itemB; // "Tail.next = other.head
 		arr[itemA].length += arr[itemB].length;
 		arr[itemB].representant = itemA;
-		for (Element elem = arr[arr[itemB].next]; elem != arr[itemB]; elem = arr[elem.next]) elem.representant = itemA;
+		arr[itemA].last = itemB;
 		return true;
 		
 	}
@@ -70,8 +84,24 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 	public String toString()
 	{
 		
-		// TODO
-		return null;
+		String string = "";
+		for (int x = 0; x < arr.length; x++)
+		{
+			if (arr[x].representant != x) continue;
+			while (true)
+			{
+				string += x;
+				if (arr[x].next != NULL) string += ", ";
+				else
+				{
+					x = arr[x].representant;
+					string += "\n";
+					break;
+				}
+				x = arr[x].next;
+			}
+		}
+		return string;
 		
 	}
 	
