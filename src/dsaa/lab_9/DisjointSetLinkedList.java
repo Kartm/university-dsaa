@@ -61,7 +61,7 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 	public int findSet(int item)
 	{
 		
-		return arr[item].representant;
+		return arr[item] == null ? -1 : arr[item].representant;
 		
 	}
 	
@@ -70,9 +70,8 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 	public boolean union(int itemA, int itemB)
 	{
 		
-		if (arr[itemA] == null || arr[itemB] == null || itemA == itemB) return false;
-		itemA = arr[itemA].representant;
-		itemB = arr[itemB].representant;
+		itemA = findSet(itemA);
+		itemB = findSet(itemB);
 		if (arr[itemA].length < arr[itemB].length)
 		{
 			int temp = itemA;
@@ -88,8 +87,6 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 			arr[itemB].representant = itemA;
 			itemB = arr[itemB].next;
 		}
-		// for (; arr[itemB].next != -1; arr[itemB].representant = itemA, itemB =
-		// arr[itemB].next);
 		return true;
 		
 	}
@@ -99,10 +96,11 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 	public String toString()
 	{
 		
-		String string = "";
+		String string = "Disjoint sets as linked list:";
 		for (int x = 0; x < arr.length; x++)
 		{
 			if (arr[x].representant != x) continue;
+			string += "\n";
 			while (true)
 			{
 				string += x;
@@ -110,7 +108,7 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 				else
 				{
 					x = arr[x].representant;
-					string += "\n";
+					
 					break;
 				}
 				x = arr[x].next;
