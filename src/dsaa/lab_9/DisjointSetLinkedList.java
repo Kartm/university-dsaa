@@ -70,13 +70,20 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 	public boolean union(int itemA, int itemB)
 	{
 		
-		if (arr[itemA] == null || arr[itemB] == null || itemA == itemB || arr[itemA].representant != itemA
-				|| arr[itemB].representant != itemB)
-			return false;
+		if (arr[itemA] == null || arr[itemB] == null || itemA == itemB) return false;
+		itemA = arr[itemA].representant;
+		itemB = arr[itemB].representant;
+		if (arr[itemA].length < arr[itemB].length)
+		{
+			int temp = itemA;
+			itemA = itemB;
+			itemB = temp;
+		}
+		if (itemA == itemB) return false;
 		arr[arr[itemA].last].next = itemB; // "Tail.next = other.head
 		arr[itemA].length += arr[itemB].length;
-		arr[itemB].representant = itemA;
-		arr[itemA].last = itemB;
+		for (; arr[itemB].next != -1; arr[itemB].representant = itemA, itemB = arr[itemB].next);
+		arr[itemA].last = arr[itemB].last;
 		return true;
 		
 	}
