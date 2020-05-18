@@ -62,11 +62,15 @@ public class DisjointSetForest implements DisjointSetDataStructure
 	@Override
 	public int findSet(int item)
 	{
-		
 		if (arr[item] == null) return -1;
-		while (arr[item].parent != item) item = arr[item].parent;
-		return item;
-		
+		int representant = item;
+
+		while (arr[representant].parent != representant) {
+			representant = arr[representant].parent;
+		}
+		arr[item].parent = representant;
+
+		return representant;
 	}
 	
 	
@@ -97,7 +101,7 @@ public class DisjointSetForest implements DisjointSetDataStructure
 	public String toString()
 	{
 		
-		String string = "";
+		String string = "Disjoint sets as forest:\n";
 		for (int x = 0; x < arr.length; x++)
 		{
 			string += x + " -> " + arr[x].parent;
