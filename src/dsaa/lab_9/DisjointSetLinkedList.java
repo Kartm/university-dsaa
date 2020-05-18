@@ -82,8 +82,14 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure
 		if (itemA == itemB) return false;
 		arr[arr[itemA].last].next = itemB; // "Tail.next = other.head
 		arr[itemA].length += arr[itemB].length;
-		for (; arr[itemB].next != -1; arr[itemB].representant = itemA, itemB = arr[itemB].next);
 		arr[itemA].last = arr[itemB].last;
+		while (itemB != -1)
+		{
+			arr[itemB].representant = itemA;
+			itemB = arr[itemB].next;
+		}
+		// for (; arr[itemB].next != -1; arr[itemB].representant = itemA, itemB =
+		// arr[itemB].next);
 		return true;
 		
 	}
