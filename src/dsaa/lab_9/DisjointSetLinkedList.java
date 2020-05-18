@@ -1,21 +1,6 @@
 package dsaa.lab_9;
 
 public class DisjointSetLinkedList implements DisjointSetDataStructure {
-
-    // public static void main(String[] args)
-    // {
-    //
-    // DisjointSetLinkedList list = new DisjointSetLinkedList(5);
-    // for (int x = 0; x < 5; x++)
-    // {
-    // list.makeSet(x);
-    // }
-    // list.union(2, 4);
-    // list.union(2, 1);
-    // System.out.println(list.toString());
-    //
-    // }
-
     public class Element {
 
         public Element(int item) {
@@ -39,10 +24,7 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure {
         }
     }
 
-    private static final int NULL = -1;
-
-    Element arr[];
-    int pos = 0; // Added myself
+    Element[] arr;
 
     public DisjointSetLinkedList(int size) {
 
@@ -61,55 +43,67 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure {
 
     @Override
     public int findSet(int item) {
+        if(arr[item] == null) {
+            return -1;
+        }
 
-        return arr[item] == null ? -1 : arr[item].representant;
-
+        return  arr[item].representant;
     }
 
 
     @Override
     public boolean union(int itemA, int itemB) {
-
+        // finding representants
         itemA = findSet(itemA);
         itemB = findSet(itemB);
+
+        if (itemA == itemB) {
+            return false;
+        }
+
         if (arr[itemA].length < arr[itemB].length) {
+            // swap the items
             int temp = itemA;
             itemA = itemB;
             itemB = temp;
         }
-        if (itemA == itemB) return false;
-        arr[arr[itemA].last].next = itemB; // "Tail.next = other.head
+
+        // attach as next
+        arr[arr[itemA].last].next = itemB;
         arr[itemA].length += arr[itemB].length;
         arr[itemA].last = arr[itemB].last;
+
         while (itemB != -1) {
             arr[itemB].representant = itemA;
             itemB = arr[itemB].next;
         }
-        return true;
 
+        return true;
     }
 
 
     @Override
     public String toString() {
 
-        String string = "Disjoint sets as linked list:";
+        StringBuilder string = new StringBuilder("Disjoint sets as linked list:");
         for (int x = 0; x < arr.length; x++) {
-            if (arr[x].representant != x) continue;
-            string += "\n";
-            while (true) {
-                string += x;
-                if (arr[x].next != NULL) string += ", ";
-                else {
-                    x = arr[x].representant;
+            if (arr[x].representant != x) {
+                continue;
+            }
 
+            string.append("\n");
+
+            while (true) {
+                string.append(x);
+                if (arr[x].next != -1) {
+                    string.append(", ");
+                } else {
+                    x = arr[x].representant;
                     break;
                 }
                 x = arr[x].next;
             }
         }
-        return string;
-
+        return string.toString();
     }
-
 }
