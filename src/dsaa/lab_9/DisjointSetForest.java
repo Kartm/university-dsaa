@@ -17,10 +17,10 @@ public class DisjointSetForest implements DisjointSetDataStructure
 	//
 	// }
 	
-	private class Element
+	public class Element
 	{
 		
-		private Element(int item)
+		public Element(int item)
 		{
 			
 			parent = item;
@@ -30,7 +30,14 @@ public class DisjointSetForest implements DisjointSetDataStructure
 		
 		int rank;
 		int parent;
-		
+
+		int getParent() {
+			return parent;
+		}
+
+		int getRank() {
+			return rank;
+		}
 	}
 	
 	Element[] arr;
@@ -70,20 +77,19 @@ public class DisjointSetForest implements DisjointSetDataStructure
 		itemA = findSet(itemA);
 		itemB = findSet(itemB);
 		if (itemA == -1 || itemB == -1 || itemA == itemB) return false;
-		if (arr[itemA].rank < arr[itemB].rank)
+
+		if (arr[itemA].rank <= arr[itemB].rank)
 		{
-			int temp = itemA;
-			itemA = itemB;
-			itemB = temp;
+			arr[itemA].parent = itemB;
+		} else if (arr[itemA].rank > arr[itemB].rank) {
+			arr[itemB].parent = itemA;
 		}
-		else if (arr[itemA].rank == arr[itemB].rank && arr[itemA].rank == 1) arr[itemA].rank = 2;
-		arr[itemB].parent = itemA;
+
+		if (arr[itemA].rank == arr[itemB].rank) {
+			arr[itemB].rank++;
+		}
+
 		return true;
-		// TODO
-		/*
-		 * Union(x,y) Link(Find-Set(x),Find-Set(y)
-		 */
-		
 	}
 	
 	
