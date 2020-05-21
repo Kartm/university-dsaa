@@ -1,6 +1,10 @@
 package dsaa_jk.assignment_7;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 
 public class BST<T> {
 
@@ -325,9 +329,58 @@ public class BST<T> {
         return string;
     }
 
-    public String printCharacteristics() {
+    public String getCharacteristics() {
         determineCharacteristics(root);
         return collectCharacteristics(root);
+    }
+
+    public void printNaturalForm() {
+        getCharacteristics();
+
+        int leaves = root.leftSubtreeLeavesCount + root.rightSubtreeLeavesCount;
+
+        int width = (int) Math.pow(2.0, 2*(Math.ceil(leaves/2.0)));
+        width = 64;
+        printLevels(root, width);
+    }
+
+    public void getTreeWidth() {
+
+    }
+
+    private void printLevels(Node<T> node, int width) {
+        if(node == null) {
+            return;
+        }
+
+        Queue<Node<T>> queue = new LinkedList<>();
+        queue.add(node);
+
+        while (true) {
+            int levelNodeCount = queue.size();
+
+            if(levelNodeCount == 0) {
+                break;
+            }
+
+            StringBuilder levelAsString = new StringBuilder();
+            while(levelNodeCount > 0) { // until we have read this entire level
+                Node<T> currentNode = queue.poll();
+
+                String valToString = currentNode == null ? "X " : currentNode.value + " ";
+                String valStr = StringUtils.center(valToString, width);
+                levelAsString.append(valStr);
+
+                if(currentNode != null) {
+                    queue.add(currentNode.left);
+                    queue.add(currentNode.right);
+                }
+
+                levelNodeCount--;
+            }
+            width /= 2;
+            System.out.printf("%s%n", levelAsString.toString());
+        }
     }
 
     public void clear() {

@@ -10,8 +10,12 @@ public class Main {
         bst.add(1);
         bst.add(12);
         bst.add(8);
+        bst.add(2);
         bst.add(3);
+        bst.add(4);
 
-        System.out.println(bst.printCharacteristics());
+        bst.printNaturalForm();
+
+        //System.out.println(bst.printCharacteristics());
     }
 }
