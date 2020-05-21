@@ -22,7 +22,7 @@ class BSTTest {
     }
 
     @Test
-    void inOrderWalk() {
+    void toStringInOrder() {
         BST<Integer> tree = new BST<Integer>();
 
         tree.add(7);
@@ -31,14 +31,7 @@ class BSTTest {
         tree.add(10);
         tree.add(12);
 
-        IntegerToStringExec exec=new IntegerToStringExec();
-        tree.inOrderWalk(exec);
-
-        assertEquals(exec.getResult(), "2; 5; 7; 10; 12");
-    }
-
-    @Test
-    void toStringInOrder() {
+        assertEquals(tree.toStringInOrder(), "2; 5; 7; 10; 12");
     }
 
     @Test
@@ -51,10 +44,7 @@ class BSTTest {
         tree.add(10);
         tree.add(12);
 
-        IntegerToStringExec exec=new IntegerToStringExec();
-        tree.preOrderWalk(exec);
-
-        assertEquals(exec.getResult(), "7; 5; 2; 10; 12");
+        assertEquals(tree.toStringPreOrder(), "7; 5; 2; 10; 12");
     }
 
     @Test
@@ -71,10 +61,7 @@ class BSTTest {
         tree.add(10);
         tree.add(12);
 
-        IntegerToStringExec exec=new IntegerToStringExec();
-        tree.postOrderWalk(exec);
-
-        assertEquals(exec.getResult(), "2; 5; 12; 10; 7");
+        assertEquals(tree.toStringPostOrder(), "2; 5; 12; 10; 7");
     }
 
     @Test

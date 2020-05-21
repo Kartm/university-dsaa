@@ -124,7 +124,7 @@ public class BST<T> {
         }
 
         string += inOrder(node.left);
-        string += node.toString() + ", ";
+        string += node.toString() + "; ";
         string += inOrder(node.right);
 
         return string;
@@ -147,7 +147,7 @@ public class BST<T> {
             return string;
         }
 
-        string += node.toString() + ", ";
+        string += node.toString() + "; ";
         string += preOrder(node.left);
         string += preOrder(node.right);
         return string;
@@ -172,7 +172,7 @@ public class BST<T> {
 
         string += postOrder(node.left);
         string += postOrder(node.right);
-        string += node.toString() + ", ";
+        string += node.toString() + "; ";
 
         return string;
     }
