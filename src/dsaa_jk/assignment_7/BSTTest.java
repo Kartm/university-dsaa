@@ -35,7 +35,7 @@ class BSTTest {
     }
 
     @Test
-    void preOrderWalk() {
+    void toStringPreOrder() {
         BST<Integer> tree = new BST<Integer>();
 
         tree.add(7);
@@ -48,11 +48,7 @@ class BSTTest {
     }
 
     @Test
-    void toStringPreOrder() {
-    }
-
-    @Test
-    void postOrderWalk() {
+    void toStringPostOrder() {
         BST<Integer> tree = new BST<Integer>();
 
         tree.add(7);
@@ -62,10 +58,6 @@ class BSTTest {
         tree.add(12);
 
         assertEquals(tree.toStringPostOrder(), "2; 5; 12; 10; 7");
-    }
-
-    @Test
-    void toStringPostOrder() {
     }
 
     @Test
