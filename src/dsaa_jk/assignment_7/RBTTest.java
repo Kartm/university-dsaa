@@ -13,8 +13,8 @@ class RBTTest {
     @Test
     void RBTLeftRotate() {
         RBT<Integer> rbTree = new RBT<Integer>();
-        rbTree.add(1);
-        rbTree.add(2);
+        rbTree.RBInsert(new RBNode<>(1));
+        rbTree.RBInsert(new RBNode<>(2));
 
         rbTree.printNaturalForm();
         System.out.println("\n");
@@ -26,5 +26,13 @@ class RBTTest {
         rbTree.RBTRightRotate(rbTree.findNode(2));
         rbTree.printNaturalForm();
         System.out.println("\n");
+
+        rbTree.RBInsert(new RBNode<>(3));
+        rbTree.printNaturalForm();
+
+        System.out.println("\n");
+
+        rbTree.RBInsert(new RBNode<>(4));
+        rbTree.printNaturalForm();
     }
 }
