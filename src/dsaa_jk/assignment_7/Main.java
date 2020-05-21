@@ -1,21 +1,28 @@
 package dsaa_jk.assignment_7;
 
 public class Main {
-    // benchmark
     public static void main(String[] args) {
-        BST<Integer> bst = new BST<>();
-        bst.add(7);
-        bst.add(5);
-        bst.add(9);
-        bst.add(1);
-        bst.add(12);
-        bst.add(8);
-        bst.add(2);
-        bst.add(3);
-        bst.add(4);
+        RBT<Integer> rbTree = new RBT<Integer>();
+        rbTree.RBInsert(new RBNode<>(1));
+        rbTree.RBInsert(new RBNode<>(2));
 
-        bst.printNaturalForm();
+        rbTree.printNaturalForm();
+        System.out.println("\n");
 
-        //System.out.println(bst.printCharacteristics());
+        rbTree.RBTLeftRotate(rbTree.findNode(1));
+        rbTree.printNaturalForm();
+        System.out.println("\n");
+
+        rbTree.RBTRightRotate(rbTree.findNode(2));
+        rbTree.printNaturalForm();
+        System.out.println("\n");
+
+        rbTree.RBInsert(new RBNode<>(3));
+        rbTree.printNaturalForm();
+
+        System.out.println("\n");
+
+        rbTree.RBInsert(new RBNode<>(4));
+        rbTree.printNaturalForm();
     }
 }
