@@ -185,12 +185,6 @@ public class RBT<T> {
         return string;
     }
 
-    // return new root
-    public RBNode<T> RB_Insert(T newVal) {
-        RB_Insert(newVal);
-        return root;
-    }
-
     public void RBTLeftRotate(RBNode<T> node) {
         RBNode<T> other = node.right;
         node.right = other.left;
@@ -231,7 +225,7 @@ public class RBT<T> {
         node.parent = other;
     }
 
-    private void RB_Insert(RBNode<T> newNode) {
+    public void RBInsert(RBNode<T> newNode) {
         if(!add(root, newNode.value)) {
             return;
         }
