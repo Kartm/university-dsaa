@@ -106,18 +106,6 @@ public class BST<T> {
         return currNode.value;
     }
 
-    public <R> void inOrderWalk(IExecutor<T, R> exec) {
-        inOrderWalk(root, exec);
-    }
-
-    private <R> void inOrderWalk(Node<T> node, IExecutor<T, R> exec) {
-        if (node != null) {
-            inOrderWalk(node.left, exec);
-            exec.execute(node.value);
-            inOrderWalk(node.right, exec);
-        }
-    }
-
     public String toStringInOrder() {
         String string = inOrder(root);
 
@@ -142,18 +130,6 @@ public class BST<T> {
         return string;
     }
 
-    public <R> void preOrderWalk(IExecutor<T, R> exec) {
-        preOrderWalk(root, exec);
-    }
-
-    private <R> void preOrderWalk(Node<T> node, IExecutor<T, R> exec) {
-        if (node != null) {
-            exec.execute(node.value);
-            preOrderWalk(node.left, exec);
-            preOrderWalk(node.right, exec);
-        }
-    }
-
     public String toStringPreOrder() {
         String string = preOrder(root);
 
@@ -175,18 +151,6 @@ public class BST<T> {
         string += preOrder(node.left);
         string += preOrder(node.right);
         return string;
-    }
-
-    public <R> void postOrderWalk(IExecutor<T, R> exec) {
-        postOrderWalk(root, exec);
-    }
-
-    private <R> void postOrderWalk(Node<T> node, IExecutor<T, R> exec) {
-        if (node != null) {
-            postOrderWalk(node.left, exec);
-            postOrderWalk(node.right, exec);
-            exec.execute(node.value);
-        }
     }
 
     public String toStringPostOrder() {
