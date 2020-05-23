@@ -61,12 +61,12 @@ class GraphTest {
     }
 
     @Test
-    void bfsRaw() {
+    void bfs() {
         assertEquals("0, 1, 2, 3, 4", graph.bfs("a"));
     }
 
     @Test
-    void dfsRaw() {
+    void dfs() {
         assertEquals("0, 1, 2, 3, 4", graph.dfs("a"));
     }
 

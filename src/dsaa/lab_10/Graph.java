@@ -8,7 +8,7 @@ public class Graph {
     private int size;
 
     HashMap<String, Integer> nameToInt; // map of document names into node numbers
-    Entry<Integer, Document>[] documents; // map node numbers to Documents
+    HashMap<Integer, Document> documents; // map node numbers to Documents
 
     @SuppressWarnings("unchecked")
     public Graph(SortedMap<String, Document> internet) {
@@ -18,7 +18,7 @@ public class Graph {
         arr = new int[size + 1][size + 1];
 
         nameToInt = new HashMap<>();
-        Entry<Integer, Document>[] documentsRaw = (Map.Entry<Integer, Document>[]) new Map.Entry[size];
+        HashMap<Integer, Document> documentsRaw = new HashMap<>();
 
         int nodeIndex = 0;
         // map document names to node numbers
@@ -26,9 +26,8 @@ public class Graph {
             Document doc = entry.getValue();
 
             nameToInt.put(doc.name, nodeIndex);
+            documentsRaw.put(nodeIndex, doc);
 
-            Entry<Integer, Document> newEntry = Map.entry(nodeIndex, doc);
-            documentsRaw[nodeIndex] = newEntry;
             nodeIndex++;
         }
 
@@ -90,7 +89,6 @@ public class Graph {
                     queue.add(i);
                 }
             }
-            System.out.println("");
         }
 
         return result.toString().substring(0, result.length() - 2);
@@ -98,10 +96,29 @@ public class Graph {
 
     // in a case you have many way to go, analyze vertices in lexicographical order
     public String dfs(String start) {
+        StringBuilder result = new StringBuilder();
         int startNode = nameToInt.get(start);
 
-        // TODO
-        return null;
+        boolean[] visited = new boolean[size];
+        Stack<Integer> stack = new Stack<>();
+
+        visited[startNode] = true;
+        stack.add(startNode);
+        while(!stack.isEmpty()) {
+            int currentNode = stack.pop();
+            result.append(currentNode).append(", ");
+            //System.out.print(currentNode + ": ");
+            // loop all adjacent nodes
+            for(int i = 0; i < arr[currentNode].length; i++) {
+                int adjacentNode = arr[currentNode][i];
+                if(adjacentNode == 1 && !visited[i]) { // if connection exists and is unvisited
+                    //System.out.print(i + ", ");
+                    stack.add(i);
+                }
+            }
+        }
+
+        return result.toString().substring(0, result.length() - 2);
     }
 
     // return the number of connected components. Use DisjointSetForest class implemented previously
