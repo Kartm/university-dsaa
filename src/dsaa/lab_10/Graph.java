@@ -22,7 +22,7 @@ public class Graph {
 
         int nodeIndex = 0;
         // map document names to node numbers
-        for(var entry: internet.entrySet()) {
+        for(Entry<String, Document> entry: internet.entrySet()) {
             Document doc = entry.getValue();
 
             nameToInt.put(doc.name, nodeIndex);
@@ -31,15 +31,16 @@ public class Graph {
             nodeIndex++;
         }
 
-        for(var entry: internet.entrySet()) {
-            var link = entry.getValue().link.entrySet();
+        for(Entry<String, Document> entry: internet.entrySet()) {
+            Set<java.util.Map.Entry<String, Link>> link = entry.getValue().link.entrySet();
             int parentIndex = nameToInt.get(entry.getValue().name);
 
-            for(var l: link) {
+            for(Entry<String, Link> l: link) {
                 String nodeText = l.getValue().ref;
 
-                var childIndex = nameToInt.get(nodeText);
-                if(childIndex == null) {
+                int childIndex = nameToInt.get(nodeText);
+
+                if(nameToInt.get(nodeText) == null) {
                     childIndex = nodeIndex + 1;
                     nodeIndex++;
                 }
@@ -120,7 +121,7 @@ public class Graph {
 
             adjacentNodes.sort(Comparator.reverseOrder());
 
-            for(var adjacentNode: adjacentNodes) {
+            for(String adjacentNode: adjacentNodes) {
                 stack.add(nameToInt.get(adjacentNode));
             }
         }
