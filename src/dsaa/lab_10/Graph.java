@@ -79,8 +79,8 @@ public class Graph {
         queue.add(startNode);
         while(!queue.isEmpty()) {
             int currentNode = queue.poll();
-            result.append(currentNode).append(", ");
-            //System.out.print(currentNode + ": ");
+            result.append(documents.get(currentNode).name).append(", ");
+
             // loop all adjacent nodes
             for(int i = 0; i < arr[currentNode].length; i++) {
                 int adjacentNode = arr[currentNode][i];
@@ -102,19 +102,26 @@ public class Graph {
         boolean[] visited = new boolean[size];
         Stack<Integer> stack = new Stack<>();
 
-        visited[startNode] = true;
         stack.add(startNode);
         while(!stack.isEmpty()) {
             int currentNode = stack.pop();
-            result.append(currentNode).append(", ");
-            //System.out.print(currentNode + ": ");
+            visited[currentNode] = true;
+            result.append(documents.get(currentNode).name).append(", ");
+
             // loop all adjacent nodes
+            // but we need to have them sorted lexicographically
+            ArrayList<String> adjacentNodes = new ArrayList<>();
             for(int i = 0; i < arr[currentNode].length; i++) {
                 int adjacentNode = arr[currentNode][i];
                 if(adjacentNode == 1 && !visited[i]) { // if connection exists and is unvisited
-                    //System.out.print(i + ", ");
-                    stack.add(i);
+                    adjacentNodes.add(documents.get(i).name);
                 }
+            }
+
+            adjacentNodes.sort(Comparator.reverseOrder());
+
+            for(var adjacentNode: adjacentNodes) {
+                stack.add(nameToInt.get(adjacentNode));
             }
         }
 
@@ -122,18 +129,44 @@ public class Graph {
     }
 
     // return the number of connected components. Use DisjointSetForest class implemented previously
-    // you can add function to count number of disjoint sets
+
     /*
 
     ConnectedComponents(G,w)
-    for each vertex uV[G] do
-        MakeSet(u)
-    for each edge (u,v)E do
+
+
+    for each edge (u,v) in E do
         if FindSet(u)  FindSet(v) then
             Union(u,v)
      */
+    // returns the number of disjoint sets
+
+
     public int connectedComponents() {
-        // TODO
-        return -1;
+        return countNumberOfDisjointSets();
+    }
+
+    public int countNumberOfDisjointSets() {
+        DisjointSetForest sets = new DisjointSetForest(size);
+        for(int nodeIndex = 0; nodeIndex < size; nodeIndex++) { // for each node u in V do
+            sets.makeSet(nodeIndex); // MakeSet(u)
+        }
+
+        for(int nodeIndex = 0; nodeIndex < size; nodeIndex++) { // for each node u in V do
+            for(int childIndex = 0; childIndex < size; childIndex++) {
+                if(nodeIndex != childIndex && arr[nodeIndex][childIndex] == 1) {
+                    //System.out.println(nodeIndex + " => " + childIndex);
+                    sets.union(nodeIndex, childIndex); // Union(u,v)
+                }
+            }
+        }
+
+        // count the representants
+        Set<Integer> representants = new HashSet<>();
+        for(int nodeIndex = 0; nodeIndex < size; nodeIndex++) {
+            representants.add(sets.findSet(nodeIndex));
+        }
+
+        return representants.size(); // todo
     }
 }

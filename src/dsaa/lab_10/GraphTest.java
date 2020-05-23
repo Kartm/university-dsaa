@@ -62,15 +62,49 @@ class GraphTest {
 
     @Test
     void bfs() {
-        assertEquals("0, 1, 2, 3, 4", graph.bfs("a"));
+        assertEquals("a, b, c, d, e", graph.bfs("a"));
     }
 
     @Test
     void dfs() {
-        assertEquals("0, 1, 2, 3, 4", graph.dfs("a"));
+        assertEquals("a, b, c, d, e", graph.dfs("a"));
     }
 
     @Test
     void connectedComponents() {
+        assertEquals(1, graph.countNumberOfDisjointSets());
+    }
+
+    @Test
+    void connectedComponentsMultiple() {
+        String emptyData = "\neod";
+        ByteArrayInputStream inEmpty = new ByteArrayInputStream(emptyData.getBytes());
+        Scanner emptyScanner = new Scanner(inEmpty);
+        emptyScanner.useDelimiter("\n");
+
+        String aData = "link=b(2)\neod";
+        ByteArrayInputStream inA = new ByteArrayInputStream(aData.getBytes());
+        Scanner aScanner = new Scanner(inA);
+        aScanner.useDelimiter("\n");
+
+        String dData = "link=e(1)\neod";
+        ByteArrayInputStream inD = new ByteArrayInputStream(dData.getBytes());
+        Scanner dScanner = new Scanner(inD);
+        dScanner.useDelimiter("\n");
+
+        Document docA = new Document("a", aScanner);
+        Document docB = new Document("b", emptyScanner);
+        Document docD = new Document("d", dScanner);
+        Document docE = new Document("e", emptyScanner);
+
+        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
+        sortedMap.put(docA.name, docA);
+        sortedMap.put(docB.name, docB);
+        sortedMap.put(docD.name, docD);
+        sortedMap.put(docE.name, docE);
+
+        graph = new Graph(sortedMap);
+
+        assertEquals(2, graph.countNumberOfDisjointSets());
     }
 }
