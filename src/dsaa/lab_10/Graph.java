@@ -1,41 +1,120 @@
 package dsaa.lab_10;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Queue;
-import java.util.Set;
-import java.util.SortedMap;
 
 public class Graph {
-    int arr[][];
-    //TODO? Collection to map Document to index of vertex
-    // You can change it
-    HashMap<String,Integer> name2Int;
+    private final int[][] arr;
+    private int size;
+
+    HashMap<String, Integer> nameToInt; // map of document names into node numbers
+    Entry<Integer, Document>[] documents; // map node numbers to Documents
+
     @SuppressWarnings("unchecked")
-    //TODO? Collection to map index of vertex to Document
-            // You can change it
-            Entry<String, Document>[] arrDoc=(Map.Entry<String, Document>[])new Map.Entry[0];
+    public Graph(SortedMap<String, Document> internet) {
+        size = internet.size();
+        // todo use sth different than size.
+        // take into account all the children
+        arr = new int[size + 1][size + 1];
 
-    // The argument type depend on a selected collection in the Main class
-    public Graph(SortedMap<String,Document> internet){
-        int size=internet.size();
-        arr=new int[size][size];
-        // TODO
+        nameToInt = new HashMap<>();
+        Entry<Integer, Document>[] documentsRaw = (Map.Entry<Integer, Document>[]) new Map.Entry[size];
+
+        int nodeIndex = 0;
+        // map document names to node numbers
+        for(var entry: internet.entrySet()) {
+            Document doc = entry.getValue();
+
+            nameToInt.put(doc.name, nodeIndex);
+
+            Entry<Integer, Document> newEntry = Map.entry(nodeIndex, doc);
+            documentsRaw[nodeIndex] = newEntry;
+            nodeIndex++;
+        }
+
+        for(var entry: internet.entrySet()) {
+            var link = entry.getValue().link.entrySet();
+            int parentIndex = nameToInt.get(entry.getValue().name);
+
+            for(var l: link) {
+                String nodeText = l.getValue().ref;
+
+                var childIndex = nameToInt.get(nodeText);
+                if(childIndex == null) {
+                    childIndex = nodeIndex + 1;
+                    nodeIndex++;
+                }
+
+                nameToInt.put(nodeText, childIndex);
+
+                arr[parentIndex][childIndex] = 1;
+                //arr[childIndex][parentIndex] = 1; // is the arrow in both directions?
+
+                nameToInt.put(nodeText, childIndex);
+            }
+        }
+
+        documents = documentsRaw;
     }
 
+    public String generateAdjacencyMatrix() {
+        StringBuilder result = new StringBuilder();
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                result.append(arr[i][j] == 0 ? "O " : "X ");
+            }
+            result.append("\n");
+        }
+        return result.toString();
+    }
+
+    // todo in a case you have many way to go, analyze vertices in lexicographical order
     public String bfs(String start) {
-        // TODO
-        return null;
+        StringBuilder result = new StringBuilder();
+        int startNode = nameToInt.get(start);
+
+        boolean[] visited = new boolean[size];
+        Queue<Integer> queue = new LinkedList<Integer>();
+
+        visited[startNode] = true;
+        queue.add(startNode);
+        while(!queue.isEmpty()) {
+            int currentNode = queue.poll();
+            result.append(currentNode).append(", ");
+            //System.out.print(currentNode + ": ");
+            // loop all adjacent nodes
+            for(int i = 0; i < arr[currentNode].length; i++) {
+                int adjacentNode = arr[currentNode][i];
+                if(adjacentNode == 1 && !visited[i]) { // if connection exists and is unvisited
+                    //System.out.print(i + ", ");
+                    queue.add(i);
+                }
+            }
+            System.out.println("");
+        }
+
+        return result.toString().substring(0, result.length() - 2);
     }
 
+    // in a case you have many way to go, analyze vertices in lexicographical order
     public String dfs(String start) {
+        int startNode = nameToInt.get(start);
+
         // TODO
         return null;
     }
 
+    // return the number of connected components. Use DisjointSetForest class implemented previously
+    // you can add function to count number of disjoint sets
+    /*
+
+    ConnectedComponents(G,w)
+    for each vertex uV[G] do
+        MakeSet(u)
+    for each edge (u,v)E do
+        if FindSet(u)  FindSet(v) then
+            Union(u,v)
+     */
     public int connectedComponents() {
         // TODO
         return -1;
