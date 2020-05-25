@@ -13,9 +13,7 @@ public class Graph {
     @SuppressWarnings("unchecked")
     public Graph(SortedMap<String, Document> internet) {
         size = internet.size();
-        // todo use sth different than size.
-        // take into account all the children
-        arr = new int[size + 1][size + 1];
+        arr = new int[size][size];
 
         nameToInt = new HashMap<>();
         HashMap<Integer, Document> documentsRaw = new HashMap<>();
@@ -38,19 +36,18 @@ public class Graph {
             for(Entry<String, Link> l: link) {
                 String nodeText = l.getValue().ref;
 
-                int childIndex = nameToInt.get(nodeText);
+                int childIndex;
 
                 if(nameToInt.get(nodeText) == null) {
-                    childIndex = nodeIndex + 1;
+                    childIndex = nodeIndex;
                     nodeIndex++;
+                    nameToInt.put(nodeText, childIndex);
+                } else {
+                    childIndex = nameToInt.get(nodeText);
                 }
 
-                nameToInt.put(nodeText, childIndex);
-
-                arr[parentIndex][childIndex] = 1;
-                //arr[childIndex][parentIndex] = 1; // is the arrow in both directions?
-
-                nameToInt.put(nodeText, childIndex);
+                arr[parentIndex][childIndex] = l.getValue().weight;
+                // arr[childIndex][parentIndex] = 1;
             }
         }
 
@@ -61,7 +58,7 @@ public class Graph {
         StringBuilder result = new StringBuilder();
         for(int i = 0; i < size; i++) {
             for(int j = 0; j < size; j++) {
-                result.append(arr[i][j] == 0 ? "O " : "X ");
+                result.append(arr[i][j] == 0 ? "O " : arr[i][j] + " ");
             }
             result.append("\n");
         }
@@ -76,17 +73,14 @@ public class Graph {
         boolean[] visited = new boolean[size];
         Queue<Integer> queue = new LinkedList<Integer>();
 
-        visited[startNode] = true;
         queue.add(startNode);
         while(!queue.isEmpty()) {
             int currentNode = queue.poll();
             result.append(documents.get(currentNode).name).append(", ");
-
+            visited[currentNode] = true;
             // loop all adjacent nodes
             for(int i = 0; i < arr[currentNode].length; i++) {
-                int adjacentNode = arr[currentNode][i];
-                if(adjacentNode == 1 && !visited[i]) { // if connection exists and is unvisited
-                    //System.out.print(i + ", ");
+                if(arr[currentNode][i] != 0 && !visited[i]) { // if connection exists and is unvisited
                     queue.add(i);
                 }
             }
@@ -98,31 +92,22 @@ public class Graph {
     // in a case you have many way to go, analyze vertices in lexicographical order
     public String dfs(String start) {
         StringBuilder result = new StringBuilder();
-        int startNode = nameToInt.get(start);
 
         boolean[] visited = new boolean[size];
-        Stack<Integer> stack = new Stack<>();
 
-        stack.add(startNode);
+        Stack<Integer> stack = new Stack<>();
+        stack.add(nameToInt.get(start));
+
         while(!stack.isEmpty()) {
             int currentNode = stack.pop();
             visited[currentNode] = true;
             result.append(documents.get(currentNode).name).append(", ");
 
             // loop all adjacent nodes
-            // but we need to have them sorted lexicographically
-            ArrayList<String> adjacentNodes = new ArrayList<>();
-            for(int i = 0; i < arr[currentNode].length; i++) {
-                int adjacentNode = arr[currentNode][i];
-                if(adjacentNode == 1 && !visited[i]) { // if connection exists and is unvisited
-                    adjacentNodes.add(documents.get(i).name);
+            for(int i = arr[currentNode].length - 1; i >= 0; i--) {
+                if(arr[currentNode][i] != 0 && !visited[i]) { // if connection exists and is unvisited
+                    stack.add(nameToInt.get(documents.get(i).name));
                 }
-            }
-
-            adjacentNodes.sort(Comparator.reverseOrder());
-
-            for(String adjacentNode: adjacentNodes) {
-                stack.add(nameToInt.get(adjacentNode));
             }
         }
 
@@ -155,7 +140,7 @@ public class Graph {
 
         for(int nodeIndex = 0; nodeIndex < size; nodeIndex++) { // for each node u in V do
             for(int childIndex = 0; childIndex < size; childIndex++) {
-                if(nodeIndex != childIndex && arr[nodeIndex][childIndex] == 1) {
+                if(nodeIndex != childIndex && arr[nodeIndex][childIndex] != 0) {
                     //System.out.println(nodeIndex + " => " + childIndex);
                     sets.union(nodeIndex, childIndex); // Union(u,v)
                 }
