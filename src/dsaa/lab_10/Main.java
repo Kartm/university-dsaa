@@ -6,10 +6,19 @@ public class Main {
 
     static Scanner scan; // for input stream
 
+    private static Document findInSortedSet(SortedSet<Document> set, String nameToFind) {
+        for(Document doc: set) {
+            if(doc.name.equals(nameToFind)) {
+                return doc;
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         System.out.println("START");
         scan = new Scanner(System.in);
-        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
+        SortedSet<Document> sortedSet = new TreeSet<>();
         Document currentDoc = null;
         boolean halt = false;
         while (!halt) {
@@ -22,7 +31,8 @@ public class Main {
             String word[] = line.split(" ");
             //getdoc name - change document to name
             if (word[0].equalsIgnoreCase("getdoc") && word.length == 2) {
-                currentDoc = (Document) sortedMap.get(word[1]);
+                // currentDoc = (Document) sortedSet.get(word[1]);
+                currentDoc = findInSortedSet(sortedSet, word[1]);
                 continue;
             }
 
@@ -30,7 +40,7 @@ public class Main {
             if (word[0].equalsIgnoreCase("ld") && word.length == 2) {
                 if (Document.isCorrectId(word[1])) {
                     currentDoc = new Document(word[1], scan);
-                    sortedMap.put(currentDoc.name, currentDoc);
+                    sortedSet.add(currentDoc);
                 } else
                     System.out.println("incorrect ID");
                 continue;
@@ -113,7 +123,7 @@ public class Main {
             if (word[0].equalsIgnoreCase("bfs") && word.length == 2) {
                 Graph graph;
                 try {
-                    graph = new Graph(sortedMap);
+                    graph = new Graph(sortedSet);
                 } catch (Exception ex) {
                     System.out.println("error");
                     continue;
@@ -130,7 +140,7 @@ public class Main {
             if (word[0].equalsIgnoreCase("dfs") && word.length == 2) {
                 Graph graph;
                 try {
-                    graph = new Graph(sortedMap);
+                    graph = new Graph(sortedSet);
                 } catch (Exception ex) {
                     System.out.println("error");
                     continue;
@@ -147,7 +157,7 @@ public class Main {
             if (word[0].equalsIgnoreCase("cc") && word.length == 1) {
                 Graph graph;
                 try {
-                    graph = new Graph(sortedMap);
+                    graph = new Graph(sortedSet);
                 } catch (Exception ex) {
                     System.out.println("error");
                     continue;

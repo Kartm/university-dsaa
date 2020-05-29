@@ -1,64 +1,45 @@
 package dsaa.lab_10;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 public class Graph {
-    private final int[][] arr;
-    private int size;
-
-    HashMap<String, Integer> nameToInt; // map of document names into node numbers
-    HashMap<Integer, Document> documents; // map node numbers to Documents
+    private final int[][] adjacencyMatrix; // filled with zeroes by default
+    private final Document[] indexToDocument;
+    private final Map<String, Integer> linkToNode = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public Graph(SortedMap<String, Document> internet) {
-        size = internet.size();
-        arr = new int[size][size];
+    public Graph(SortedSet<Document> documents) {
+        int size = documents.size();
+        adjacencyMatrix = new int[size][size];
+        indexToDocument = new Document[size];
 
-        nameToInt = new HashMap<>();
-        HashMap<Integer, Document> documentsRaw = new HashMap<>();
-
+        // setup the nodes
         int nodeIndex = 0;
-        // map document names to node numbers
-        for(Entry<String, Document> entry: internet.entrySet()) {
-            Document doc = entry.getValue();
-
-            nameToInt.put(doc.name, nodeIndex);
-            documentsRaw.put(nodeIndex, doc);
-
+        for(Document doc: documents) {
+            indexToDocument[nodeIndex] = doc;
+            linkToNode.put(doc.name, nodeIndex);
             nodeIndex++;
         }
 
-        for(Entry<String, Document> entry: internet.entrySet()) {
-            Set<java.util.Map.Entry<String, Link>> link = entry.getValue().link.entrySet();
-            int parentIndex = nameToInt.get(entry.getValue().name);
-
-            for(Entry<String, Link> l: link) {
-                String nodeText = l.getValue().ref;
-
-                int childIndex;
-
-                if(nameToInt.get(nodeText) == null) {
-                    childIndex = nodeIndex;
-                    nodeIndex++;
-                    nameToInt.put(nodeText, childIndex);
-                } else {
-                    childIndex = nameToInt.get(nodeText);
+        // setup the edges
+        nodeIndex = 0;
+        for(Document doc: documents) {
+            // all the outgoing edges
+            for(Link link: doc.link.values()) {
+                if(linkToNode.containsKey(link.ref)) { // if target node exists
+                    int targetIndex = linkToNode.get(link.ref);
+                    adjacencyMatrix[nodeIndex][targetIndex] = link.weight;
                 }
-
-                arr[parentIndex][childIndex] = l.getValue().weight;
-                // arr[childIndex][parentIndex] = 1;
             }
+            nodeIndex++;
         }
-
-        documents = documentsRaw;
     }
 
     public String generateAdjacencyMatrix() {
         StringBuilder result = new StringBuilder();
-        for(int i = 0; i < size; i++) {
-            for(int j = 0; j < size; j++) {
-                result.append(arr[i][j] == 0 ? "O " : arr[i][j] + " ");
+        for(int i = 0; i < adjacencyMatrix.length; i++) {
+            for(int j = 0; j < adjacencyMatrix[i].length; j++) {
+                result.append(adjacencyMatrix[i][j] == 0 ? "O " : adjacencyMatrix[i][j] + " ");
             }
             result.append("\n");
         }
@@ -71,19 +52,20 @@ public class Graph {
         if(!checkNode(start)) {
             return null;
         }
-        int startNode = nameToInt.get(start);
 
-        boolean[] visited = new boolean[size];
+        int startNode = linkToNode.get(start);
+
+        boolean[] visited = new boolean[adjacencyMatrix.length];
         Queue<Integer> queue = new LinkedList<Integer>();
 
         queue.add(startNode);
         while(!queue.isEmpty()) {
             int currentNode = queue.poll();
-            result.append(documents.get(currentNode).name).append(", ");
+            result.append(indexToDocument[currentNode].name).append(", ");
             visited[currentNode] = true;
             // loop all adjacent nodes
-            for(int i = 0; i < arr[currentNode].length; i++) {
-                if(arr[currentNode][i] != 0 && !visited[i]) { // if connection exists and is unvisited
+            for(int i = 0; i < adjacencyMatrix[currentNode].length; i++) {
+                if(adjacencyMatrix[currentNode][i] != 0 && !visited[i]) { // if connection exists and is unvisited
                     queue.add(i);
                 }
             }
@@ -96,26 +78,26 @@ public class Graph {
     public String dfs(String start) {
         StringBuilder result = new StringBuilder();
 
-        boolean[] visited = new boolean[size];
+        boolean[] visited = new boolean[adjacencyMatrix.length];
 
         Stack<Integer> stack = new Stack<>();
 
         if(!checkNode(start)) {
             return null;
         }
-        int startNode = nameToInt.get(start);
+        int startNode = linkToNode.get(start);
 
         stack.add(startNode);
 
         while(!stack.isEmpty()) {
             int currentNode = stack.pop();
             visited[currentNode] = true;
-            result.append(documents.get(currentNode).name).append(", ");
+            result.append(indexToDocument[currentNode].name).append(", ");
 
             // loop all adjacent nodes
-            for(int i = arr[currentNode].length - 1; i >= 0; i--) {
-                if(arr[currentNode][i] != 0 && !visited[i]) { // if connection exists and is unvisited
-                    stack.add(nameToInt.get(documents.get(i).name));
+            for(int i = adjacencyMatrix[currentNode].length - 1; i >= 0; i--) {
+                if(adjacencyMatrix[currentNode][i] != 0 && !visited[i]) { // if connection exists and is unvisited
+                    stack.add(linkToNode.get(indexToDocument[i].name));
                 }
             }
         }
@@ -128,14 +110,14 @@ public class Graph {
     }
 
     public int countNumberOfDisjointSets() {
-        DisjointSetForest sets = new DisjointSetForest(size);
-        for(int nodeIndex = 0; nodeIndex < size; nodeIndex++) { // for each node u in V do
+        DisjointSetForest sets = new DisjointSetForest(adjacencyMatrix.length);
+        for(int nodeIndex = 0; nodeIndex < adjacencyMatrix.length; nodeIndex++) { // for each node u in V do
             sets.makeSet(nodeIndex); // MakeSet(u)
         }
 
-        for(int nodeIndex = 0; nodeIndex < size; nodeIndex++) { // for each node u in V do
-            for(int childIndex = 0; childIndex < size; childIndex++) {
-                if(nodeIndex != childIndex && arr[nodeIndex][childIndex] != 0) {
+        for(int nodeIndex = 0; nodeIndex < adjacencyMatrix.length; nodeIndex++) { // for each node u in V do
+            for(int childIndex = 0; childIndex < adjacencyMatrix[nodeIndex].length; childIndex++) {
+                if(nodeIndex != childIndex && adjacencyMatrix[nodeIndex][childIndex] != 0) {
                     //System.out.println(nodeIndex + " => " + childIndex);
                     sets.union(nodeIndex, childIndex); // Union(u,v)
                 }
@@ -144,7 +126,7 @@ public class Graph {
 
         // count the representants
         Set<Integer> representants = new HashSet<>();
-        for(int nodeIndex = 0; nodeIndex < size; nodeIndex++) {
+        for(int nodeIndex = 0; nodeIndex < adjacencyMatrix.length; nodeIndex++) {
             representants.add(sets.findSet(nodeIndex));
         }
 
@@ -152,8 +134,6 @@ public class Graph {
     }
 
     private boolean checkNode(String name) {
-        return nameToInt != null &&
-                documents != null &&
-                nameToInt.containsKey(name);
+        return linkToNode.containsKey(name);
     }
 }

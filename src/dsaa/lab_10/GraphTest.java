@@ -4,9 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
-import java.util.Scanner;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,14 +40,14 @@ class GraphTest {
         Document docD = new Document("d", dScanner);
         Document docE = new Document("e", emptyScanner);
 
-        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
-        sortedMap.put(docA.name, docA);
-        sortedMap.put(docB.name, docB);
-        sortedMap.put(docC.name, docC);
-        sortedMap.put(docD.name, docD);
-        sortedMap.put(docE.name, docE);
+        SortedSet<Document> set = new TreeSet<>();
+        set.add(docA);
+        set.add(docB);
+        set.add(docC);
+        set.add(docD);
+        set.add(docE);
 
-        graph = new Graph(sortedMap);
+        graph = new Graph(set);
     }
 
     @Test
@@ -104,14 +102,14 @@ class GraphTest {
         sc = new Scanner(byteStream);
         Document docE = new Document("e", sc);
 
-        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
-        sortedMap.put(docA.name, docA);
-        sortedMap.put(docB.name, docB);
-        sortedMap.put(docC.name, docC);
-        sortedMap.put(docD.name, docD);
-        sortedMap.put(docE.name, docE);
+        SortedSet<Document> set = new TreeSet<>();
+        set.add(docA);
+        set.add(docB);
+        set.add(docC);
+        set.add(docD);
+        set.add(docE);
 
-        graph = new Graph(sortedMap);
+        graph = new Graph(set);
         assertEquals("a, b, c, d, e", graph.bfs("a"));
         assertEquals("a, b, c, d, e", graph.dfs("a"));
 
@@ -135,11 +133,11 @@ class GraphTest {
         sc = new Scanner(byteStream);
         Document docB = new Document("b", sc);
 
-        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
-        sortedMap.put(docA.name, docA);
-        sortedMap.put(docB.name, docB);
+        SortedSet<Document> set = new TreeSet<>();
+        set.add(docA);
+        set.add(docB);
 
-        graph = new Graph(sortedMap);
+        graph = new Graph(set);
         assertEquals("a, b", graph.bfs("a"));
         assertEquals("a, b", graph.dfs("a"));
 
@@ -165,12 +163,12 @@ class GraphTest {
         sc = new Scanner(byteStream);
         Document docC = new Document("c", sc);
 
-        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
-        sortedMap.put(docA.name, docA);
-        sortedMap.put(docB.name, docB);
-        sortedMap.put(docC.name, docC);
+        SortedSet<Document> set = new TreeSet<>();
+        set.add(docA);
+        set.add(docB);
+        set.add(docC);
 
-        graph = new Graph(sortedMap);
+        graph = new Graph(set);
         assertEquals(2, graph.connectedComponents());
     }
 
@@ -192,15 +190,13 @@ class GraphTest {
         sc = new Scanner(byteStream);
         Document docC = new Document("c", sc);
 
-        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
-        sortedMap.put(docA.name, docA);
-        sortedMap.put(docB.name, docB);
-        sortedMap.put(docC.name, docC);
+        SortedSet<Document> set = new TreeSet<>();
+        set.add(docA);
+        set.add(docB);
+        set.add(docC);
 
-        graph = new Graph(sortedMap);
-        assertThrows(NullPointerException.class, () -> {
-            graph.dfs("d");
-        });
+        graph = new Graph(set);
+        assertNull(graph.dfs("d"));
     }
 
     @Test
@@ -211,10 +207,10 @@ class GraphTest {
         sc.useDelimiter("\n");
         Document docA = new Document("a", sc);
 
-        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
-        sortedMap.put(docA.name, docA);
+        SortedSet<Document> set = new TreeSet<>();
+        set.add(docA);
 
-        graph = new Graph(sortedMap);
+        graph = new Graph(set);
         assertEquals("a", graph.dfs("a"));
     }
 
@@ -226,10 +222,10 @@ class GraphTest {
         sc.useDelimiter("\n");
         Document docA = new Document("a", sc);
 
-        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
-        sortedMap.put(docA.name, docA);
+        SortedSet<Document> set = new TreeSet<>();
+        set.add(docA);
 
-        graph = new Graph(sortedMap);
+        graph = new Graph(set);
         assertEquals("a", graph.dfs("a"));
     }
 
@@ -245,7 +241,7 @@ class GraphTest {
 
     @Test
     void traversalAdvancedNames() {
-        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
+        SortedSet<Document> set = new TreeSet<Document>();
         Data[] inputs = new Data[]{new Data("parent", "link=child1(2)\nlink=child2(2)\neod"),
                 new Data("child1", "link=grandchild1(2)\neod"),
                 new Data("child2", "link=grandchild2(2)\nlink=grandchild3(2)\neod"),
@@ -259,10 +255,10 @@ class GraphTest {
             Scanner sc = new Scanner(byteStream);
             sc.useDelimiter("\n");
             Document doc = new Document(input.nodeName, sc);
-            sortedMap.put(doc.name, doc);
+            set.add(doc);
         }
 
-        graph = new Graph(sortedMap);
+        graph = new Graph(set);
         assertEquals("parent, child1, grandchild1, child2, grandchild2, grandchild3", graph.dfs("parent"));
         assertEquals("parent, child1, child2, grandchild1, grandchild2, grandchild3", graph.bfs("parent"));
     }
@@ -294,13 +290,13 @@ class GraphTest {
         Document docD = new Document("d", dScanner);
         Document docE = new Document("e", emptyScanner);
 
-        SortedMap<String, Document> sortedMap = new TreeMap<String, Document>();
-        sortedMap.put(docA.name, docA);
-        sortedMap.put(docB.name, docB);
-        sortedMap.put(docD.name, docD);
-        sortedMap.put(docE.name, docE);
+        SortedSet<Document> set = new TreeSet<>();
+        set.add(docA);
+        set.add(docB);
+        set.add(docD);
+        set.add(docE);
 
-        graph = new Graph(sortedMap);
+        graph = new Graph(set);
 
         assertEquals(2, graph.countNumberOfDisjointSets());
     }

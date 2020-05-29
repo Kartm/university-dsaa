@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Document implements IWithName {
+public class Document implements IWithName, Comparable<Document> {
     public String name;
     // TODO? You can change implementation of Link collection
     public SortedMap<String, Link> link;
@@ -85,5 +85,11 @@ public class Document implements IWithName {
     @Override
     public String getName() {
         return name;
+    }
+
+    // to sort graph nodes in lexicographical order
+    @Override
+    public int compareTo(Document other) {
+        return name.compareTo(other.name);
     }
 }
