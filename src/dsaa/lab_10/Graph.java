@@ -68,6 +68,9 @@ public class Graph {
     // todo in a case you have many way to go, analyze vertices in lexicographical order
     public String bfs(String start) {
         StringBuilder result = new StringBuilder();
+        if(!checkNode(start)) {
+            return null;
+        }
         int startNode = nameToInt.get(start);
 
         boolean[] visited = new boolean[size];
@@ -86,7 +89,7 @@ public class Graph {
             }
         }
 
-        return result.toString().substring(0, result.length() - 2);
+        return result.toString().replaceAll(", $", "");
     }
 
     // in a case you have many way to go, analyze vertices in lexicographical order
@@ -96,7 +99,13 @@ public class Graph {
         boolean[] visited = new boolean[size];
 
         Stack<Integer> stack = new Stack<>();
-        stack.add(nameToInt.get(start));
+
+        if(!checkNode(start)) {
+            return null;
+        }
+        int startNode = nameToInt.get(start);
+
+        stack.add(startNode);
 
         while(!stack.isEmpty()) {
             int currentNode = stack.pop();
@@ -111,22 +120,8 @@ public class Graph {
             }
         }
 
-        return result.toString().substring(0, result.length() - 2);
+        return result.toString().replaceAll(", $", "");
     }
-
-    // return the number of connected components. Use DisjointSetForest class implemented previously
-
-    /*
-
-    ConnectedComponents(G,w)
-
-
-    for each edge (u,v) in E do
-        if FindSet(u)  FindSet(v) then
-            Union(u,v)
-     */
-    // returns the number of disjoint sets
-
 
     public int connectedComponents() {
         return countNumberOfDisjointSets();
@@ -154,5 +149,11 @@ public class Graph {
         }
 
         return representants.size(); // todo
+    }
+
+    private boolean checkNode(String name) {
+        return nameToInt != null &&
+                documents != null &&
+                nameToInt.containsKey(name);
     }
 }

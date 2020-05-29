@@ -34,7 +34,6 @@ public class Document implements IWithName {
             } else {
                 Link linkFromToken = createLink(token);
                 if (linkFromToken != null) {
-                    // todo what's the key here?
                     link.put(linkFromToken.ref, linkFromToken);
                 }
             }

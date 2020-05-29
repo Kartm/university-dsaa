@@ -111,7 +111,13 @@ public class Main {
 
             // bfs str
             if (word[0].equalsIgnoreCase("bfs") && word.length == 2) {
-                Graph graph = new Graph(sortedMap);
+                Graph graph;
+                try {
+                    graph = new Graph(sortedMap);
+                } catch (Exception ex) {
+                    System.out.println("error");
+                    continue;
+                }
                 String str = graph.bfs(word[1]);
                 if (str != null) {
                     System.out.println(str);
@@ -122,7 +128,13 @@ public class Main {
             }
             // dfs str
             if (word[0].equalsIgnoreCase("dfs") && word.length == 2) {
-                Graph graph = new Graph(sortedMap);
+                Graph graph;
+                try {
+                    graph = new Graph(sortedMap);
+                } catch (Exception ex) {
+                    System.out.println("error");
+                    continue;
+                }
                 String str = graph.dfs(word[1]);
                 if (str != null) {
                     System.out.println(str);
@@ -133,7 +145,13 @@ public class Main {
             }
             // cc
             if (word[0].equalsIgnoreCase("cc") && word.length == 1) {
-                Graph graph = new Graph(sortedMap);
+                Graph graph;
+                try {
+                    graph = new Graph(sortedMap);
+                } catch (Exception ex) {
+                    System.out.println("error");
+                    continue;
+                }
                 int str = graph.connectedComponents();
                 System.out.println(str);
                 continue;
