@@ -61,12 +61,14 @@ public class Graph {
         queue.add(startNode);
         while(!queue.isEmpty()) {
             int currentNode = queue.poll();
-            result.append(indexToDocument[currentNode].name).append(", ");
-            visited[currentNode] = true;
-            // loop all adjacent nodes
-            for(int i = 0; i < adjacencyMatrix[currentNode].length; i++) {
-                if(adjacencyMatrix[currentNode][i] != 0 && !visited[i]) { // if connection exists and is unvisited
-                    queue.add(i);
+            if(!visited[currentNode]) {
+                result.append(indexToDocument[currentNode].name).append(", ");
+                visited[currentNode] = true;
+                // loop all adjacent nodes
+                for (int i = 0; i < adjacencyMatrix[currentNode].length; i++) {
+                    if (adjacencyMatrix[currentNode][i] != 0 && !visited[i]) { // if connection exists and is unvisited
+                        queue.add(i);
+                    }
                 }
             }
         }
@@ -91,13 +93,15 @@ public class Graph {
 
         while(!stack.isEmpty()) {
             int currentNode = stack.pop();
-            visited[currentNode] = true;
-            result.append(indexToDocument[currentNode].name).append(", ");
+            if(!visited[currentNode]) {
+                visited[currentNode] = true;
+                result.append(indexToDocument[currentNode].name).append(", ");
 
-            // loop all adjacent nodes
-            for(int i = adjacencyMatrix[currentNode].length - 1; i >= 0; i--) {
-                if(adjacencyMatrix[currentNode][i] != 0 && !visited[i]) { // if connection exists and is unvisited
-                    stack.add(linkToNode.get(indexToDocument[i].name));
+                // loop all adjacent nodes
+                for (int i = adjacencyMatrix[currentNode].length - 1; i >= 0; i--) {
+                    if (adjacencyMatrix[currentNode][i] != 0 && !visited[i]) { // if connection exists and is unvisited
+                        stack.add(linkToNode.get(indexToDocument[i].name));
+                    }
                 }
             }
         }
