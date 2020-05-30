@@ -39,6 +39,11 @@ public class Main {
             // ld documentName
             if (word[0].equalsIgnoreCase("ld") && word.length == 2) {
                 if (Document.isCorrectId(word[1])) {
+                    if(findInSortedSet(sortedSet, word[1]) != null) {
+                        System.out.println("error");
+                        continue;
+                    }
+
                     currentDoc = new Document(word[1], scan);
                     sortedSet.add(currentDoc);
                 } else
@@ -80,10 +85,11 @@ public class Main {
                 if (currentDoc != null) {
                     // changed this line to reuse link creation
                     Link link = Document.createLink("link=" + word[1]);
-                    if (link == null)
+                    if (link == null || link.ref == null || link.weight < 0 || !Document.isCorrectId(word[1]))
                         System.out.println("error");
                     else {
                         currentDoc.link.put(link.ref, link);
+                        // todo ensure it overwrites it
                         System.out.println("true");
                     }
                 } else
@@ -94,7 +100,7 @@ public class Main {
             if (word[0].equalsIgnoreCase("get") && word.length == 2) {
                 if (currentDoc != null) {
                     Link l = currentDoc.link.get(word[1]);
-                    if (l != null) {
+                    if (l != null && l.ref != null && l.weight >= 0) {
                         System.out.println(l);
                     } else {
                         System.out.println("error");
@@ -107,7 +113,7 @@ public class Main {
             if (word[0].equalsIgnoreCase("rem") && word.length == 2) {
                 if (currentDoc != null) {
                     Link l = currentDoc.link.remove(word[1]);
-                    if (l != null) {
+                    if (l != null && l.ref != null && l.weight >= 0) {
                         // write the removed link
                         System.out.println(l);
                     } else {
@@ -121,13 +127,8 @@ public class Main {
 
             // bfs str
             if (word[0].equalsIgnoreCase("bfs") && word.length == 2) {
-                Graph graph;
-                try {
-                    graph = new Graph(sortedSet);
-                } catch (Exception ex) {
-                    System.out.println("error");
-                    continue;
-                }
+                Graph graph = new Graph(sortedSet);
+
                 String str = graph.bfs(word[1]);
                 if (str != null) {
                     System.out.println(str);
@@ -138,13 +139,8 @@ public class Main {
             }
             // dfs str
             if (word[0].equalsIgnoreCase("dfs") && word.length == 2) {
-                Graph graph;
-                try {
-                    graph = new Graph(sortedSet);
-                } catch (Exception ex) {
-                    System.out.println("error");
-                    continue;
-                }
+                Graph graph = new Graph(sortedSet);
+
                 String str = graph.dfs(word[1]);
                 if (str != null) {
                     System.out.println(str);
@@ -155,13 +151,8 @@ public class Main {
             }
             // cc
             if (word[0].equalsIgnoreCase("cc") && word.length == 1) {
-                Graph graph;
-                try {
-                    graph = new Graph(sortedSet);
-                } catch (Exception ex) {
-                    System.out.println("error");
-                    continue;
-                }
+                Graph graph = new Graph(sortedSet);
+
                 int str = graph.connectedComponents();
                 System.out.println(str);
                 continue;
