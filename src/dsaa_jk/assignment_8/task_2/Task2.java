@@ -49,7 +49,7 @@ public class Task2 {
         cities.put("Serock", new City("Serock"));
 
         ArrayList<Road> roads = new ArrayList<>(Arrays.asList(
-                new Road(cities.get("Manowo"), cities.get("Gdynia"), 5),
+                new Road(cities.get("Manowo"), cities.get("Gdynia"), 6),
                 new Road(cities.get("Manowo"), cities.get("Czarne"), 1),
                 new Road(cities.get("Manowo"), cities.get("Serock"), 1),
                 new Road(cities.get("Serock"), cities.get("Czarne"), 2),

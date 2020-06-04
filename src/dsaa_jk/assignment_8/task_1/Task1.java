@@ -9,12 +9,12 @@ public class Task1 {
         DictionaryKey keyA = new DictionaryKey("abc");
         DictionaryKey keyB = new DictionaryKey("alongword");
 
-        dictionaryChaining.put(keyA, "some value with key FB");
-        dictionaryChaining.put(keyB, "some value with key Ea");
-        dictionaryLinearProbing.put(keyA, "some value with key FB");
-        dictionaryLinearProbing.put(keyB, "some value with key Ea");
+        dictionaryChaining.put(keyA, "some value with key abc");
+        dictionaryChaining.put(keyB, "some value with key alongword");
+        dictionaryLinearProbing.put(keyA, "some value with key abc");
+        dictionaryLinearProbing.put(keyB, "some value with key alongword");
 
-        // "FB" and "Ea" are generating the same hashcodes
+        // keyA and keyB are generating the same hashcodes
         System.out.println(keyA.hashCode());
         System.out.println(keyB.hashCode());
 

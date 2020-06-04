@@ -103,7 +103,7 @@ public class LinearProbingHashTable<K, V> implements IDictionary<K, V> {
         keys[i] = null;
         values[i] = null;
 
-        // rehashing all keys at the front
+        // rehashing all keys after the one deleted
         i = (i + 1) % capacity;
         while (keys[i] != null) {
             K tempKey = keys[i];
