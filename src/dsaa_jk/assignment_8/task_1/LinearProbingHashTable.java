@@ -15,10 +15,9 @@ public class LinearProbingHashTable<K, V> implements IDictionary<K, V> {
     @SuppressWarnings("unchecked")
     public LinearProbingHashTable(int capacity) {
         this.capacity = capacity;
-        numberOfElements = 0;
 
-        keys = (K[]) new Object[this.capacity];
-        values = (V[]) new Object[this.capacity];
+        keys = (K[]) new Object[capacity];
+        values = (V[]) new Object[capacity];
     }
 
     public int size() {
@@ -29,10 +28,6 @@ public class LinearProbingHashTable<K, V> implements IDictionary<K, V> {
         return this.size() == 0;
     }
 
-    public boolean containsKey(K K) {
-        return get(K) != null;
-    }
-
     public int getCapacity() {
         return this.capacity;
     }
@@ -41,33 +36,32 @@ public class LinearProbingHashTable<K, V> implements IDictionary<K, V> {
         return Math.abs(key.hashCode() % getCapacity());
     }
 
-    // resizes the hash table to the given capacity by re-hashing all of the keys
     private void resize(int capacity) {
-        LinearProbingHashTable<K, V> temp = new LinearProbingHashTable<>(capacity);
+        LinearProbingHashTable<K, V> newHashTable = new LinearProbingHashTable<>(capacity);
+
         for (int i = 0; i < this.capacity; i++) {
             if (keys[i] != null) {
-                temp.put(keys[i], values[i]);
+                newHashTable.put(keys[i], values[i]);
             }
         }
 
-        keys = temp.keys;
-        values = temp.values;
-        this.capacity = temp.capacity;
+        keys = newHashTable.keys;
+        values = newHashTable.values;
+        this.capacity = newHashTable.capacity;
     }
 
     public void put(K key, V value) {
-        if (value == null) {
-            delete(key);
-            return;
-        }
-
         int i;
         for (i = getBucket(key); keys[i] != null; i = (i + 1) % capacity) {
             if (keys[i].equals(key)) {
+                // replace the value since the key already exists
                 values[i] = value;
                 return;
             }
         }
+
+        // found next "unoccupied" spot
+        // put the element there
         keys[i] = key;
         values[i] = value;
         numberOfElements++;
@@ -79,9 +73,12 @@ public class LinearProbingHashTable<K, V> implements IDictionary<K, V> {
     }
 
     public V get(K key) {
-        for (int i = getBucket(key); keys[i] != null; i = (i + 1) % capacity)
-            if (keys[i].equals(key))
+        for (int i = getBucket(key); keys[i] != null; i = (i + 1) % capacity) {
+            if (keys[i].equals(key)) {
                 return values[i];
+            }
+        }
+
         return null;
     }
 
@@ -91,29 +88,33 @@ public class LinearProbingHashTable<K, V> implements IDictionary<K, V> {
     }
 
     public void delete(K key) {
-        if (key == null) throw new IllegalArgumentException("argument to delete() is null");
-        if (!containsKey(key)) return;
+        // do nothing if the key is absent
+        if (get(key) == null) {
+            return;
+        }
 
-        // find position i of K
         int i = getBucket(key);
+        // find the occurrence of key
         while (!key.equals(keys[i])) {
             i = (i + 1) % capacity;
         }
 
-        // delete K and associated V
+        // remove key and value
         keys[i] = null;
         values[i] = null;
 
-        // rehash all keys in same cluster
+        // rehashing all keys at the front
         i = (i + 1) % capacity;
         while (keys[i] != null) {
-            // delete keys[i] an values[i] and reinsert
-            K KToRehash = keys[i];
-            V valToRehash = values[i];
+            K tempKey = keys[i];
+            V tempValue = values[i];
+
+            // remove and insert again
             keys[i] = null;
             values[i] = null;
             numberOfElements--;
-            put(KToRehash, valToRehash);
+
+            put(tempKey, tempValue);
             i = (i + 1) % capacity;
         }
 
