@@ -1,53 +1,64 @@
 package dsaa.lab_12;
 
-import dsaa.lab_8.Link;
-
 import java.util.LinkedList;
 
 public class KMP implements IStringMatcher {
-
     @Override
     public LinkedList<Integer> validShifts(String pattern, String text) {
         LinkedList<Integer> shifts = new LinkedList<>();
 
-        char[] textArr = text.toCharArray();
-        char[] patternArr = pattern.toCharArray();
-        int[] prefixFunction = calculatePrefixFunction(patternArr);
+        if (text == null || pattern == null || pattern.length() > text.length()) {
+            return shifts;
+        }
 
-        int q = 0;
+        int[] prefixFunction = computePrefixFunction(pattern);
 
-        for(int i = 0; i < text.length(); i++) {
-            while(q > 0 && patternArr[q + 1] != textArr[i]) {
-                q = prefixFunction[q];
+        int textIndex = 0;
+        int patternIndex = 0;
+
+        // traverse the whole string
+        while (textIndex < text.length()) {
+            if (pattern.charAt(patternIndex) == text.charAt(textIndex)) {
+                patternIndex++;
+                textIndex++;
             }
-            if(patternArr[q] == textArr[i]) { // patternArr[q + 1] == textArr[i]
-                q++;
-            }
-            if(q == patternArr.length) {
-                shifts.add(i-patternArr.length);
-                q = prefixFunction[q];
+
+            if (patternIndex == pattern.length()) {
+                shifts.add(textIndex - patternIndex);
+                patternIndex = prefixFunction[patternIndex - 1];
+            } else {
+                if (textIndex < text.length() && pattern.charAt(patternIndex) != text.charAt(textIndex)) {
+                    if(patternIndex == 0) {
+                        textIndex++;
+                    } else {
+                        patternIndex = prefixFunction[patternIndex - 1];
+                    }
+                }
             }
         }
 
         return shifts;
     }
 
-    private int[] calculatePrefixFunction(char[] patternArr) {
-        int[] prefix = new int[patternArr.length];
-        prefix[0] = 0;
+    int[] computePrefixFunction(String pattern) {
+        int[] prefixFunction = new int[pattern.length()];
+        int i = 1;
+        int length = 0;
 
-        int k = 0;
-
-        for(int q = 1; q < patternArr.length; q++) {
-            while(k > 0 && patternArr[k + 1] != patternArr[q]) {
-                k = prefix[k];
+        while (i < pattern.length()) {
+            if (pattern.charAt(i) == pattern.charAt(length)) {
+                length++;
+                prefixFunction[i] = length;
+                i++;
+            } else {
+                if(length == 0) {
+                    i++;
+                } else {
+                    length = prefixFunction[length - 1];
+                }
             }
-            if(patternArr[k] == patternArr[q]) {
-                k++;
-            }
-            prefix[q] = k;
         }
 
-        return prefix;
+        return prefixFunction;
     }
 }
